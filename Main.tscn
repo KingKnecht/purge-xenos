@@ -18,5 +18,5 @@ current_cell = Vector2i(2, 2)
 map_interface = NodePath("../BaseMap")
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=574880625]
-position = Vector2(481, 257)
+position = Vector2(352, 214)
 zoom = Vector2(2, 2)
