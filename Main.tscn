@@ -1,0 +1,22 @@
+[gd_scene format=3 uid="uid://0gcuyn2hbk0q"]
+
+[ext_resource type="Script" uid="uid://c3jv1tmo0vecv" path="res://assets/Maps/map.gd" id="1_r0du0"]
+[ext_resource type="PackedScene" uid="uid://d0d3wfy2eueti" path="res://assets/Characters/Base/BaseCharacter.tscn" id="2_cm0pq"]
+[ext_resource type="PackedScene" uid="uid://b3qc3esm2jrpm" path="res://assets/Maps/Base/BaseMap.tscn" id="3_fos0i"]
+
+[node name="Main" type="Node2D" unique_id=1619049666]
+
+[node name="Map" type="Node2D" parent="." unique_id=822142112]
+y_sort_enabled = true
+script = ExtResource("1_r0du0")
+
+[node name="BaseMap" parent="Map" unique_id=1207446625 instance=ExtResource("3_fos0i")]
+
+[node name="Player" parent="Map" unique_id=1271547261 node_paths=PackedStringArray("map_interface") instance=ExtResource("2_cm0pq")]
+position = Vector2(80, 80)
+current_cell = Vector2i(2, 2)
+map_interface = NodePath("../BaseMap")
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=574880625]
+position = Vector2(481, 257)
+zoom = Vector2(2, 2)

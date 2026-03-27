@@ -1,0 +1,37 @@
+[gd_scene format=3 uid="uid://d0d3wfy2eueti"]
+
+[ext_resource type="Texture2D" uid="uid://dmkvlnityogwd" path="res://assets/Characters/Tiles/player_blue_armor_idle_no_wpn.png" id="1_4qf43"]
+[ext_resource type="Script" uid="uid://be1gc3pil8tda" path="res://assets/Characters/Base/base_character.gd" id="1_qocqw"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qocqw"]
+atlas = ExtResource("1_4qf43")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5i3ag"]
+atlas = ExtResource("1_4qf43")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_7hrrp"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qocqw")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5i3ag")
+}],
+"loop": true,
+"name": &"idle_no_weapon_W",
+"speed": 3.0
+}]
+
+[node name="BaseCharacter" type="Marker2D" unique_id=1271547261]
+position = Vector2(48, 48)
+script = ExtResource("1_qocqw")
+current_cell = Vector2i(1, 1)
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=487185866]
+sprite_frames = SubResource("SpriteFrames_7hrrp")
+animation = &"idle_no_weapon_W"
+autoplay = "idle_no_weapon_W"
+frame_progress = 0.1827175
