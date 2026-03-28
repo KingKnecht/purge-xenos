@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="purge_xenos_02"
-run/main_scene="uid://0gcuyn2hbk0q"
+run/main_scene="uid://bjaasdkrjmyo5"
 config/features=PackedStringArray("4.6", "Mobile")
 config/icon="res://icon.svg"
 

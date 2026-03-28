@@ -1,6 +1,8 @@
 extends Control
 class_name StartMenu
 
+const GAME_SCENE = preload("res://Main.tscn")
+
 signal new_game
 signal show_settings
 signal quit_game
@@ -16,10 +18,14 @@ func _process(delta: float) -> void:
 
 
 func _on_btn_new_game_pressed() -> void:
+	get_tree().change_scene_to_packed(GAME_SCENE)
 	new_game.emit()
 
 func _on_btn_settings_pressed() -> void:
 	show_settings.emit()
 
 func _on_btn_quit_pressed() -> void:
+	# allows handling of quit event
+	get_tree().root.propagate_notification(NOTIFICATION_WM_CLOSE_REQUEST)
+	get_tree().quit()
 	quit_game.emit()
