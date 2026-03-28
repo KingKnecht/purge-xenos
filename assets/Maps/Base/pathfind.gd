@@ -10,7 +10,7 @@ var astar_grid = AStarGrid2D.new()
 
 func _ready() -> void:
 	astar_grid.region.position = floor.get_used_rect().position
-	astar_grid.region.size = floor.get_used_rect().size / 2
+	astar_grid.region.size = floor.get_used_rect().size
 	astar_grid.cell_size = floor.tile_set.tile_size * 2
 	astar_grid.default_compute_heuristic = AStarGrid2D.HEURISTIC_MANHATTAN
 	astar_grid.default_estimate_heuristic = AStarGrid2D.HEURISTIC_MANHATTAN
@@ -20,7 +20,7 @@ func _ready() -> void:
 	load_wall()
 
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	pass
 
 func remove_character(cell_pos: Vector2i):
@@ -35,5 +35,6 @@ func load_wall():
 	
 	for cell_pos in cell_positions:
 		var cell = walls.get_cell_tile_data(cell_pos)
+		
 		if bool(cell.get_custom_data("IsBlocked")):
 			astar_grid.set_point_solid(cell_pos, true)

@@ -12,8 +12,7 @@ func _ready() -> void:
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	##print(get_local_mouse_position())
+func _process(_delta: float) -> void:
 	(material as ShaderMaterial).set_shader_parameter("mouse_position", MapHelpers.cell_to_pixel(MapHelpers.pixel_to_cell(get_local_mouse_position())) )
 
 func _input(event: InputEvent) -> void:

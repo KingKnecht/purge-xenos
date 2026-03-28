@@ -29,7 +29,7 @@ func play() -> void:
 		$AnimatedSprite2D.play("idle_no_weapon" +  sequence_suffix)
 		
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	play()
 	
 func _on_move_requested(target: Vector2i):
