@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://1b51mkvm77k3"]
+
+[ext_resource type="Script" uid="uid://cg6vfahkwrwql" path="res://assets/Globals/battle_driver.gd" id="1_61ux5"]
+
+[node name="BattleDriver" type="Node" unique_id=766240216]
+script = ExtResource("1_61ux5")

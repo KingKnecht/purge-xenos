@@ -272,12 +272,12 @@ animations = [{
 }]
 
 [node name="BaseCharacter" type="Marker2D" unique_id=1271547261]
-position = Vector2(48, 48)
+position = Vector2(48, 304)
 script = ExtResource("1_qocqw")
-current_cell = Vector2i(1, 1)
+current_cell = Vector2i(1, 9)
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=487185866]
 sprite_frames = SubResource("SpriteFrames_7hrrp")
 animation = &"idle_no_weapon_E"
 autoplay = "idle_no_weapon_S"
-frame_progress = 0.22944109
+frame_progress = 0.16809005

@@ -5,7 +5,7 @@ class_name BaseCharacter
 @export var map_interface: MapInterface
 @export var cursor_manager: CursorManager
 @export var Direction : Directions.Points = Directions.Points.EAST
-
+	 
 const DIRECTION_SUFFIXES: = {
 	Directions.Points.NORTH: "_N",
 	Directions.Points.EAST: "_E",
@@ -16,7 +16,9 @@ var is_moving = false
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	cursor_manager.move_requested.connect(_on_move_requested)
+	if cursor_manager != null:
+		cursor_manager.move_requested.connect(_on_move_requested)
+	
 	var current_pixel_pos = MapHelpers.cell_to_pixel(current_cell)
 	self.position = current_pixel_pos
 	map_interface.pathfind.add_character(current_cell)
@@ -31,6 +33,8 @@ func play() -> void:
 		
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta: float) -> void:
+	if Engine.is_editor_hint():
+		position = MapHelpers.cell_to_pixel(current_cell)
 	play()
 	
 func _on_move_requested(target: Vector2i):

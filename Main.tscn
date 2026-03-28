@@ -24,6 +24,12 @@ zoom = Vector2(2, 2)
 position_smoothing_enabled = true
 position_smoothing_speed = 10.0
 
+[node name="Enemy" parent="." unique_id=600027895 node_paths=PackedStringArray("map_interface") instance=ExtResource("2_cm0pq")]
+position = Vector2(304, 48)
+current_cell = Vector2i(9, 1)
+map_interface = NodePath("../Map/BaseMap")
+Direction = 3
+
 [node name="CursorManager" type="Node" parent="." unique_id=1069659580 node_paths=PackedStringArray("map_interface")]
 script = ExtResource("4_cm0pq")
 map_interface = NodePath("../Map/BaseMap")
