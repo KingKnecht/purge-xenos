@@ -38,7 +38,10 @@ func _process(_delta: float) -> void:
 	else:
 		tile_highlight.visible = false
 		
-func _input(event: InputEvent) -> void:
+func _unhandled_input(event: InputEvent) -> void:
+	if player.selected_action == null:
+		return
+	
 	if event is InputEventMouse:
 		var mouse_pos = map_interface.map_floor.get_local_mouse_position()
 		var cell = MapHelpers.pixel_to_cell(mouse_pos)
@@ -79,7 +82,7 @@ func _update_path_dots(path: Array[Vector2i]) -> void:
 				dot.visible = true
 				dot.position = MapHelpers.cell_to_pixel(path[i + 1])
 				var material = dot.material as ShaderMaterial
-				if i < player.actions:
+				if i < player.selected_action.movement:
 					dot.material = dot_material_reachable
 				else:
 					dot.material = dot_material_unreachable

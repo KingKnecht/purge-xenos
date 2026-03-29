@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="CombatAction" format=3 uid="uid://bviauijb2vfwk"]
+
+[ext_resource type="Script" uid="uid://bcseivrinftr5" path="res://assets/CombatScripts/combat_action.gd" id="1_pp1iw"]
+
+[resource]
+script = ExtResource("1_pp1iw")
+display_name = "Heal"
+description = "Heals the target"
+heal = 5
+valid_target_flags = 2
+metadata/_custom_type_script = "uid://bcseivrinftr5"

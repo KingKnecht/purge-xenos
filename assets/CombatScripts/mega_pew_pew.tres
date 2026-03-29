@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="CombatAction" format=3 uid="uid://pvp63ekg0n3o"]
+
+[ext_resource type="Script" uid="uid://bcseivrinftr5" path="res://assets/CombatScripts/combat_action.gd" id="1_xubi4"]
+
+[resource]
+script = ExtResource("1_xubi4")
+display_name = "Mega Pew Pew"
+description = "Kaboom"
+damage = 100
+valid_target_flags = 4
+metadata/_custom_type_script = "uid://bcseivrinftr5"

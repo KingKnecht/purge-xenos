@@ -5,14 +5,16 @@ class_name BaseCharacter
 @export var map_interface: MapInterface
 @export var cursor_manager: CursorManager
 @export var Direction : Directions.Points = Directions.Points.EAST
+@export var combat_actions : Array[CombatAction] = []
+@export var selected_action : CombatAction
 
 @onready var sprite = $AnimatedSprite2D
-
-var actions = 5
 ## Use negative values for enemies
 @export var PlayerIndex : int = 0
 
 signal turn_ended(character : BaseCharacter)
+signal action_on_character_requested(source: BaseCharacter, action: CombatAction, target : BaseCharacter)
+signal action_on_cell_requested(source: BaseCharacter, action: CombatAction, target : Vector2i)
 
 var is_player : bool:
 	get:
@@ -68,15 +70,18 @@ func _on_move_requested(target: Vector2i):
 	
 	var path = map_interface.pathfind.astar_grid.get_id_path(old_pos, target)
 	
-	if path.size() - 1 > actions:
-		path = path.slice(0, actions + 1)
+	if selected_action == null:
+		return
+	
+	if path.size() - 1 > selected_action.movement:
+		path = path.slice(0, selected_action.movement + 1)
 		target = path[-1]
 		
 	map_interface.pathfind.add_character(target)
 	
 	is_moving = true
 	
-	if path.size() == 0:
+	if path.size() <= 1:
 		is_moving = false
 		return
 	
@@ -106,15 +111,52 @@ func calc_direction(from : Vector2i, to: Vector2i):
 func start_turn():
 	print("Character (%d) turn started" % PlayerIndex)
 	if is_player:
+
 		# do stuff
-		var wait_time = randf_range(1.0, 3.5)
+		#var wait_time = randf_range(1.0, 3.5)
+		#await get_tree().create_timer(wait_time).timeout
+		#
+		selected_action = combat_actions[0] # Move
+		#excecute_action_on_cell(selected_action, Vector2i(3,3))
+		#
+		#wait_time = randf_range(1.0, 3.5)
+		#await get_tree().create_timer(wait_time).timeout
+		#
+		#selected_action = combat_actions[1]
+		#excecute_action_on_character(selected_action, $"../Enemy")
+		#
+		var wait_time = 10
 		await get_tree().create_timer(wait_time).timeout
+				
 		end_turn()
 	else:
 		# do AI stuff
 		var wait_time = randf_range(1.0, 3.5)
 		await get_tree().create_timer(wait_time).timeout
-		end_turn()
-	
+		
+		var idx : int = randi_range(0, combat_actions.size() - 1)
+		selected_action = combat_actions[idx]
+		
+		if EnumHelpers.has_flag(CombatAction.ValidTargetFlags.SELF, selected_action.valid_target_flags):
+			excecute_action_on_character(selected_action, self)
+		elif EnumHelpers.has_flag(CombatAction.ValidTargetFlags.OPPONENTS, selected_action.valid_target_flags):
+			excecute_action_on_character(selected_action, $"../Player")
+		elif EnumHelpers.has_flag(CombatAction.ValidTargetFlags.CELL, selected_action.valid_target_flags):
+			var player_cell = $"../Player".current_cell		
+			excecute_action_on_cell(selected_action, current_cell + player_cell)
+			
+		wait_time = 0.5
+		await get_tree().create_timer(wait_time).timeout
+		
+		end_turn()	
+
 func end_turn():
 	turn_ended.emit(self)
+
+func excecute_action_on_character(action: CombatAction, target : BaseCharacter):
+	action_on_character_requested.emit(self, action, target)
+	
+func excecute_action_on_cell(action: CombatAction, target : Vector2i):
+	action_on_cell_requested.emit(self, action, target)
+	
+	

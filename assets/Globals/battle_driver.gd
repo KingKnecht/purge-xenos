@@ -19,18 +19,17 @@ var is_battle_running = true
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	#for character in Players:
-		#character.turn_ended.connect(on_turn_ended)
-	
-	#for character in Enemies:
-		#character.turn_ended.connect(on_turn_ended)
-	
+
 	match current_group_type:
 		GroupTypes.PLAYERS: 
 			current_group = Players
 		GroupTypes.ENEMIES: 
 			current_group = Enemies
 		_: push_error("Unkown type")
+	
+	for entity in Players + Enemies:
+		entity.action_on_cell_requested.connect(excecute_action_on_cell)
+		entity.action_on_character_requested.connect(excecute_action_on_character)
 	
 	start_battle()
 	
@@ -60,32 +59,23 @@ func next_round() -> void:
 		GroupTypes.ENEMIES: 
 			current_group_type = GroupTypes.PLAYERS
 			current_group = Players
-			
-#func on_turn_ended(character : BaseCharacter) -> void :
-	#
-	##print("Character (%d) turn ended" % character.PlayerIndex)
-	#
-	#characters_ended_turn.append(character)
-	#
-	#if characters_started_turn.size() > 0 && characters_ended_turn.size() == characters_started_turn.size():
-		## All characters of a group have ended their turn
-		#characters_started_turn.clear()
-		#characters_ended_turn.clear()
-		#
-		#match current_group_type:
-			#GroupTypes.PLAYERS: 
-				#current_group_type = GroupTypes.ENEMIES
-			#GroupTypes.ENEMIES: 
-				#current_group_type = GroupTypes.PLAYERS
-		#
-		#current_character = null		
-		#
-		#next_turn()
+
+func excecute_action_on_character(fromCharacter : BaseCharacter, action : CombatAction, target : BaseCharacter):
+	if fromCharacter != current_character:
+		return
+	print("Character (%d) requested action '%s' on character '%d'" % [fromCharacter.PlayerIndex, action.display_name, target.PlayerIndex])
 	
+func excecute_action_on_cell(fromCharacter : BaseCharacter,action: CombatAction,  target : Vector2i):
+	if fromCharacter != current_character:
+		return
+	print("Character (%d) requested action '%s' on cell '%s'" % [fromCharacter.PlayerIndex, action.display_name, str(target)])
+	
+	#todo: if is 'move'
+	fromCharacter._on_move_requested(target)
+		
 func on_character_died(character : BaseCharacter) -> void :
 	
 	Enemies.erase(character)
-		
 	if Enemies.size() == 0:
 		is_battle_running = false
 		battle_won.emit(GroupTypes.PLAYERS)
