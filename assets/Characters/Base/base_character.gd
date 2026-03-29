@@ -5,6 +5,14 @@ class_name BaseCharacter
 @export var map_interface: MapInterface
 @export var cursor_manager: CursorManager
 @export var Direction : Directions.Points = Directions.Points.EAST
+## Use negative values for enemies
+@export var PlayerIndex : int = 0
+
+signal turn_ended(character : BaseCharacter)
+
+var is_player : bool:
+	get:
+		return PlayerIndex > -1
 	 
 const DIRECTION_SUFFIXES: = {
 	Directions.Points.NORTH: "_N",
@@ -16,9 +24,11 @@ var is_moving = false
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	if cursor_manager != null:
-		cursor_manager.move_requested.connect(_on_move_requested)
 	
+	if is_player:
+		assert(is_instance_valid(cursor_manager), "CursorManager not set for Player: %d" % PlayerIndex)
+		cursor_manager.move_requested.connect(_on_move_requested)
+			
 	var current_pixel_pos = MapHelpers.cell_to_pixel(current_cell)
 	self.position = current_pixel_pos
 	map_interface.pathfind.add_character(current_cell)
@@ -27,9 +37,9 @@ func _ready() -> void:
 func play() -> void: 
 	var sequence_suffix: String = DIRECTION_SUFFIXES.get(Direction, "_E") 
 	if is_moving:
-		$AnimatedSprite2D.play("walk_no_weapon" +  sequence_suffix)
+		$AnimatedSprite2D.play("walk_no_weapon" + sequence_suffix)
 	else:
-		$AnimatedSprite2D.play("idle_no_weapon" +  sequence_suffix)
+		$AnimatedSprite2D.play("idle_no_weapon" + sequence_suffix)
 		
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta: float) -> void:
@@ -78,3 +88,18 @@ func _on_move_requested(target: Vector2i):
 func calc_direction(from : Vector2i, to: Vector2i):
 	Direction = Directions.vector_to_direction(to - from)
 	
+func start_turn():
+	print("Character (%d) turn started" % PlayerIndex)
+	if is_player:
+		# do stuff
+		var wait_time = randf_range(1.0, 3.5)
+		await get_tree().create_timer(wait_time).timeout
+		end_turn()
+	else:
+		# do AI stuff
+		var wait_time = randf_range(1.0, 3.5)
+		await get_tree().create_timer(wait_time).timeout
+		end_turn()
+	
+func end_turn():
+	turn_ended.emit(self)

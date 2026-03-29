@@ -1,6 +1,8 @@
 [gd_scene format=3 uid="uid://0gcuyn2hbk0q"]
 
+[ext_resource type="Script" uid="uid://cg6vfahkwrwql" path="res://assets/Globals/battle_driver.gd" id="1_lgr22"]
 [ext_resource type="Script" uid="uid://c3jv1tmo0vecv" path="res://assets/Maps/map.gd" id="1_r0du0"]
+[ext_resource type="Script" uid="uid://bhq6dpaf4gn1p" path="res://main.gd" id="1_trn2v"]
 [ext_resource type="PackedScene" uid="uid://c2wg4et87hsc6" path="res://assets/Maps/Backgrounds/Starfield/Starfield.tscn" id="2_3dxm6"]
 [ext_resource type="PackedScene" uid="uid://d0d3wfy2eueti" path="res://assets/Characters/Base/BaseCharacter.tscn" id="2_cm0pq"]
 [ext_resource type="PackedScene" uid="uid://b3qc3esm2jrpm" path="res://assets/Maps/Base/BaseMap.tscn" id="3_fos0i"]
@@ -8,6 +10,13 @@
 [ext_resource type="PackedScene" uid="uid://dqh4254o3w1d6" path="res://assets/Maps/tile_highlight.tscn" id="5_fos0i"]
 
 [node name="Main" type="Node2D" unique_id=1619049666]
+script = ExtResource("1_trn2v")
+
+[node name="BattleDriver" type="Node" parent="." unique_id=962336274 node_paths=PackedStringArray("Players", "Enemies")]
+script = ExtResource("1_lgr22")
+Players = [NodePath("../Map/Player")]
+Enemies = [NodePath("../Map/Enemy"), NodePath("../Map/Enemy2")]
+metadata/_custom_type_script = "uid://cg6vfahkwrwql"
 
 [node name="Starfield" parent="." unique_id=1854515856 instance=ExtResource("2_3dxm6")]
 position = Vector2(-618, -482)
@@ -23,17 +32,26 @@ position = Vector2(80, 80)
 current_cell = Vector2i(2, 2)
 map_interface = NodePath("../BaseMap")
 cursor_manager = NodePath("../../CursorManager")
+PlayerIndex = 0
 
 [node name="Camera2D" type="Camera2D" parent="Map/Player" unique_id=574880625]
 zoom = Vector2(2, 2)
 position_smoothing_enabled = true
 position_smoothing_speed = 10.0
 
-[node name="Enemy" parent="." unique_id=600027895 node_paths=PackedStringArray("map_interface") instance=ExtResource("2_cm0pq")]
+[node name="Enemy" parent="Map" unique_id=2117608341 node_paths=PackedStringArray("map_interface") instance=ExtResource("2_cm0pq")]
 position = Vector2(304, 48)
 current_cell = Vector2i(9, 1)
-map_interface = NodePath("../Map/BaseMap")
+map_interface = NodePath("../BaseMap")
 Direction = 3
+PlayerIndex = -1
+
+[node name="Enemy2" parent="Map" unique_id=600027895 node_paths=PackedStringArray("map_interface") instance=ExtResource("2_cm0pq")]
+position = Vector2(400, 48)
+current_cell = Vector2i(12, 1)
+map_interface = NodePath("../BaseMap")
+Direction = 0
+PlayerIndex = -2
 
 [node name="CursorManager" type="Node" parent="." unique_id=1069659580 node_paths=PackedStringArray("map_interface")]
 script = ExtResource("4_cm0pq")
