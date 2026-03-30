@@ -23,6 +23,7 @@ MapHelpers="*uid://bvwx7ueuw6kbv"
 
 window/size/viewport_width=1600
 window/size/viewport_height=850
+window/stretch/mode="viewport"
 
 [dotnet]
 

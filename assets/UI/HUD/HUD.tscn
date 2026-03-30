@@ -1,12 +1,7 @@
 [gd_scene format=3 uid="uid://l3ahdws078cw"]
 
 [ext_resource type="Script" uid="uid://c0w0nnfa3trsc" path="res://assets/UI/HUD/hud.gd" id="1_0muis"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_c6i3y"]
-bg_color = Color(1, 1, 1, 0)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_kjvhd"]
-bg_color = Color(0.14117648, 0.14117648, 0.14117648, 0.05882353)
+[ext_resource type="PackedScene" uid="uid://ykod7seiqehp" path="res://assets/World.tscn" id="2_ymj7e"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_sc1dx"]
 bg_color = Color(0.1254902, 0.1254902, 0.1254902, 1)
@@ -39,44 +34,35 @@ corner_radius_bottom_left = 16
 shadow_size = 6
 shadow_offset = Vector2(3, 3)
 
-[node name="HUD" type="CanvasLayer" unique_id=488963275]
+[node name="HUD" type="CanvasLayer" unique_id=1730960279]
 script = ExtResource("1_0muis")
 
-[node name="CompleteScreenPanel" type="Panel" parent="." unique_id=1717087809]
+[node name="VertAlign" type="VBoxContainer" parent="." unique_id=217473421]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-mouse_filter = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_c6i3y")
 
-[node name="MouseBlockerPanel" type="Panel" parent="CompleteScreenPanel" unique_id=783926215]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -21.0
-offset_top = 691.0
-offset_right = 21.0
-offset_bottom = 20.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_kjvhd")
+[node name="WorldViewportContainer" type="SubViewportContainer" parent="VertAlign" unique_id=419654861]
+layout_mode = 2
+size_flags_vertical = 3
 
-[node name="MenuPanel" type="Panel" parent="CompleteScreenPanel" unique_id=1880548480]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_top = 735.0
-offset_bottom = 3.0
-grow_horizontal = 2
-grow_vertical = 2
+[node name="WorldViewport" type="SubViewport" parent="VertAlign/WorldViewportContainer" unique_id=1880592979]
+handle_input_locally = false
+msaa_2d = 1
+canvas_item_default_texture_filter = 0
+size = Vector2i(1600, 746)
+render_target_update_mode = 4
+
+[node name="World" parent="VertAlign/WorldViewportContainer/WorldViewport" unique_id=2008988094 instance=ExtResource("2_ymj7e")]
+
+[node name="MenuPanel" type="Panel" parent="VertAlign" unique_id=1880548480]
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_sc1dx")
 
-[node name="BtnEndTurn" type="Button" parent="CompleteScreenPanel/MenuPanel" unique_id=2008884456]
+[node name="BtnEndTurn" type="Button" parent="VertAlign/MenuPanel" unique_id=2008884456]
 layout_mode = 1
 anchors_preset = 3
 anchor_left = 1.0
@@ -95,4 +81,4 @@ theme_override_styles/pressed = SubResource("StyleBoxFlat_j4qnp")
 theme_override_styles/hover = SubResource("StyleBoxFlat_fpfj3")
 text = "End  Turn"
 
-[connection signal="pressed" from="CompleteScreenPanel/MenuPanel/BtnEndTurn" to="." method="_on_btn_end_turn_pressed"]
+[connection signal="pressed" from="VertAlign/MenuPanel/BtnEndTurn" to="." method="_on_btn_end_turn_pressed"]
