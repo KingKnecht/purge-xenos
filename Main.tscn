@@ -1,75 +1,10 @@
 [gd_scene format=3 uid="uid://0gcuyn2hbk0q"]
 
-[ext_resource type="Script" uid="uid://cg6vfahkwrwql" path="res://assets/Globals/battle_driver.gd" id="1_lgr22"]
-[ext_resource type="Script" uid="uid://c3jv1tmo0vecv" path="res://assets/Maps/map.gd" id="1_r0du0"]
 [ext_resource type="Script" uid="uid://bhq6dpaf4gn1p" path="res://main.gd" id="1_trn2v"]
-[ext_resource type="PackedScene" uid="uid://c2wg4et87hsc6" path="res://assets/Maps/Backgrounds/Starfield/Starfield.tscn" id="2_3dxm6"]
-[ext_resource type="PackedScene" uid="uid://d0d3wfy2eueti" path="res://assets/Characters/Base/BaseCharacter.tscn" id="2_cm0pq"]
-[ext_resource type="PackedScene" uid="uid://b3qc3esm2jrpm" path="res://assets/Maps/Base/BaseMap.tscn" id="3_fos0i"]
-[ext_resource type="Script" uid="uid://dwwt8xxhmunnb" path="res://assets/UI/Main/cursor_manager.gd" id="4_cm0pq"]
-[ext_resource type="PackedScene" uid="uid://dqh4254o3w1d6" path="res://assets/Maps/TileHighlight.tscn" id="5_fos0i"]
-[ext_resource type="Script" uid="uid://bcseivrinftr5" path="res://assets/CombatScripts/combat_action.gd" id="7_5vvyt"]
-[ext_resource type="Resource" uid="uid://pvp63ekg0n3o" path="res://assets/CombatScripts/mega_pew_pew.tres" id="8_c2ibq"]
-[ext_resource type="Resource" uid="uid://d3nshxs4lelbg" path="res://assets/CombatScripts/move.tres" id="8_c6i3y"]
-[ext_resource type="Resource" uid="uid://c3vo0if8yieak" path="res://assets/CombatScripts/pew_pew.tres" id="9_c2ibq"]
-[ext_resource type="Resource" uid="uid://bviauijb2vfwk" path="res://assets/CombatScripts/heal.tres" id="10_j4qnp"]
 [ext_resource type="PackedScene" uid="uid://l3ahdws078cw" path="res://assets/UI/HUD/HUD.tscn" id="13_c6i3y"]
 
 [node name="Main" type="Node2D" unique_id=1619049666]
 script = ExtResource("1_trn2v")
 
-[node name="Starfield" parent="." unique_id=1854515856 instance=ExtResource("2_3dxm6")]
-position = Vector2(-618, -482)
-scale = Vector2(3, 3)
-
-[node name="Map" type="Node2D" parent="." unique_id=822142112]
-script = ExtResource("1_r0du0")
-
-[node name="BaseMap" parent="Map" unique_id=1207446625 instance=ExtResource("3_fos0i")]
-
-[node name="Player" parent="Map/BaseMap" unique_id=1271547261 node_paths=PackedStringArray("map_interface", "cursor_manager") instance=ExtResource("2_cm0pq")]
-position = Vector2(80, 78)
-current_cell = Vector2i(3, 3)
-map_interface = NodePath("..")
-cursor_manager = NodePath("../../../CursorManager")
-combat_actions = Array[ExtResource("7_5vvyt")]([ExtResource("8_c6i3y"), ExtResource("9_c2ibq"), ExtResource("8_c2ibq")])
-
-[node name="Camera2D" type="Camera2D" parent="Map/BaseMap/Player" unique_id=1155140893]
-position = Vector2(47, 26)
-zoom = Vector2(2, 2)
-
-[node name="Enemy" parent="Map/BaseMap" unique_id=2117608341 node_paths=PackedStringArray("map_interface") instance=ExtResource("2_cm0pq")]
-position = Vector2(304, 46)
-current_cell = Vector2i(9, 1)
-map_interface = NodePath("..")
-Direction = 3
-combat_actions = Array[ExtResource("7_5vvyt")]([ExtResource("8_c6i3y"), ExtResource("9_c2ibq"), ExtResource("10_j4qnp")])
-PlayerIndex = -1
-
-[node name="Enemy2" parent="Map/BaseMap" unique_id=600027895 node_paths=PackedStringArray("map_interface") instance=ExtResource("2_cm0pq")]
-position = Vector2(400, 46)
-current_cell = Vector2i(12, 1)
-map_interface = NodePath("..")
-Direction = 0
-combat_actions = Array[ExtResource("7_5vvyt")]([ExtResource("8_c6i3y"), ExtResource("9_c2ibq")])
-PlayerIndex = -2
-
-[node name="BattleDriver" type="Node" parent="." unique_id=962336274 node_paths=PackedStringArray("Players", "Enemies")]
-script = ExtResource("1_lgr22")
-Players = [NodePath("../Map/BaseMap/Player")]
-Enemies = [NodePath("../Map/BaseMap/Enemy"), NodePath("../Map/BaseMap/Enemy2")]
-metadata/_custom_type_script = "uid://cg6vfahkwrwql"
-
-[node name="CursorManager" type="Node" parent="." unique_id=1069659580 node_paths=PackedStringArray("map_interface", "player")]
-script = ExtResource("4_cm0pq")
-map_interface = NodePath("../Map/BaseMap")
-player = NodePath("../Map/BaseMap/Player")
-
-[node name="TileHighlight" parent="CursorManager" unique_id=1758861644 instance=ExtResource("5_fos0i")]
-visible = false
-position = Vector2(0, -21)
-
-[node name="PathDots" type="Node" parent="CursorManager" unique_id=1978934507]
-
 [node name="HUD" parent="." unique_id=488963275 node_paths=PackedStringArray("Player") instance=ExtResource("13_c6i3y")]
-Player = NodePath("../Map/BaseMap/Player")
+Player = NodePath("")
