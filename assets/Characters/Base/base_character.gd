@@ -5,7 +5,7 @@ class_name BaseCharacter
 @export var map_interface: MapInterface
 @export var cursor_manager: CursorManager
 @export var Direction : Directions.Points = Directions.Points.EAST
-@export var combat_actions : Array[CombatAction] = []
+@export var combat_actions : Dictionary[CombatAction.ActionType, CombatAction]
 @export var selected_action : CombatAction
 
 @onready var sprite = $AnimatedSprite2D
@@ -34,7 +34,6 @@ func _ready() -> void:
 	if is_player:
 		assert(is_instance_valid(cursor_manager), "CursorManager not set for Player: %d" % PlayerIndex)
 		cursor_manager.move_requested.connect(_on_move_requested)
-		#SignalBus.on_hud_player_end_turn.connect()
 				
 	var current_pixel_pos = MapHelpers.cell_to_pixel(current_cell)
 	self.position = current_pixel_pos
@@ -114,11 +113,6 @@ func start_turn():
 	if is_player:
 		SignalBus.on_player_begin_turn.emit(self)
 		while true:
-			# notify the hud
-				
-			# do stuff
-	
-			#selected_action = combat_actions[0] # Move
 			var player = await SignalBus.on_hud_player_end_turn
 			print("awaited")
 			if player == self:
@@ -153,4 +147,5 @@ func excecute_action_on_character(action: CombatAction, target : BaseCharacter):
 func excecute_action_on_cell(action: CombatAction, target : Vector2i):
 	action_on_cell_requested.emit(self, action, target)
 	
-	
+func select_action(type: CombatAction.ActionType):
+	selected_action = combat_actions.get(type)

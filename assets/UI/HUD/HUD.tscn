@@ -81,4 +81,22 @@ theme_override_styles/pressed = SubResource("StyleBoxFlat_j4qnp")
 theme_override_styles/hover = SubResource("StyleBoxFlat_fpfj3")
 text = "End  Turn"
 
+[node name="BtnWalk" type="Button" parent="VertAlign/MenuPanel" unique_id=37727695]
+layout_mode = 0
+offset_left = 7.0
+offset_top = 6.0
+offset_right = 54.0
+offset_bottom = 37.0
+text = "Walk"
+
+[node name="BtnAttack" type="Button" parent="VertAlign/MenuPanel" unique_id=93575028]
+layout_mode = 0
+offset_left = 66.0
+offset_top = 6.0
+offset_right = 124.0
+offset_bottom = 37.0
+text = "Attack"
+
 [connection signal="pressed" from="VertAlign/MenuPanel/BtnEndTurn" to="." method="_on_btn_end_turn_pressed"]
+[connection signal="pressed" from="VertAlign/MenuPanel/BtnWalk" to="." method="_on_btn_walk_pressed"]
+[connection signal="pressed" from="VertAlign/MenuPanel/BtnAttack" to="." method="_on_btn_attack_pressed"]

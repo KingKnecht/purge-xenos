@@ -2,10 +2,12 @@ extends Node
 class_name CursorManager
 
 @export var map_interface: MapInterface
+@export var battle_driver: BattleDriver
 @export var player: BaseCharacter
 
 @onready var tile_highlight = $TileHighlight
 @onready var path_dots = $PathDots
+@onready var attack_highlight = $AttackHighlight
 
 var _is_cell_targeted = false
 var _current_targeted_cell: Vector2i
@@ -42,10 +44,18 @@ func _unhandled_input(event: InputEvent) -> void:
 	if player.selected_action == null:
 		return
 	
-	if event is InputEventMouse:
+	_display_selected_action(event)
+			
+func _display_selected_action(event: InputEvent):
+		display_path_dots(event)
+		display_attack_highlight()
+
+func display_path_dots(event: InputEvent):
+	if player.selected_action.movement == 0:
+		_update_path_dots([])	
+	elif event is InputEventMouse:
 		var mouse_pos = map_interface.map_floor.get_local_mouse_position()
 		var cell = MapHelpers.pixel_to_cell(mouse_pos)
-		
 		if map_interface.is_tile_walk_selectable(cell):
 			if not player.is_moving:
 				if not _is_cell_targeted:
@@ -64,8 +74,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		else:
 			_is_cell_targeted = false
 			_update_path_dots([])
-
-
+	
 func _update_path_dots(path: Array[Vector2i]) -> void:
 	if path.size() == 0:
 		for child in path_dots.get_children():
@@ -88,3 +97,22 @@ func _update_path_dots(path: Array[Vector2i]) -> void:
 					dot.material = dot_material_unreachable
 			else:
 				dot.visible = false
+				
+func display_attack_highlight():
+	if player.selected_action.damage == 0:
+		return
+		
+	var mouse_pos = map_interface.map_floor.get_local_mouse_position()
+	var target_cell = MapHelpers.pixel_to_cell(mouse_pos)
+	
+	var on_valid_targ = false
+	if EnumHelpers.has_flag(
+		player.selected_action.valid_target_flags, 
+		CombatAction.ValidTargetFlags.OPPONENTS):
+			if player.PlayerIndex > -1:
+				for enemy in battle_driver.Enemies:
+					if enemy.current_cell == target_cell:
+						on_valid_targ = true
+						
+	attack_highlight.position = MapHelpers.cell_to_pixel(target_cell)
+	attack_highlight.visible = on_valid_targ

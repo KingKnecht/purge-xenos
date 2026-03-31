@@ -31,7 +31,7 @@ func _ready() -> void:
 		entity.action_on_cell_requested.connect(excecute_action_on_cell)
 		entity.action_on_character_requested.connect(excecute_action_on_character)
 	
-	start_battle()
+	SignalBus.battle_started.connect(start_battle)
 	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
@@ -47,7 +47,7 @@ func next_round() -> void:
 	for entity in current_group:
 		current_character = entity
 		
-		entity.start_turn.call_deferred() # Make sure we don't miss the awaited signal in the next line.
+		entity.start_turn() # Make sure we don't miss the awaited signal in the next line.
 		var character = await entity.turn_ended
 		print("Character (%d) turn ended" % character.PlayerIndex)
 	
