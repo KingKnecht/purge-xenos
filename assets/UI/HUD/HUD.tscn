@@ -3,7 +3,46 @@
 [ext_resource type="Script" uid="uid://c0w0nnfa3trsc" path="res://assets/UI/HUD/hud.gd" id="1_0muis"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_sc1dx"]
-bg_color = Color(0.1254902, 0.1254902, 0.1254902, 1)
+bg_color = Color(0, 0, 0, 0.15294118)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0muis"]
+content_margin_left = 6.0
+content_margin_top = 4.0
+content_margin_right = 6.0
+content_margin_bottom = 4.0
+bg_color = Color(0.1, 0.1, 0.1, 0.6)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+corner_detail = 5
+shadow_size = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ymj7e"]
+content_margin_left = 6.0
+content_margin_top = 4.0
+content_margin_right = 6.0
+content_margin_bottom = 4.0
+bg_color = Color(0.14767182, 0.14767179, 0.14767179, 0.6)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+corner_detail = 5
+shadow_size = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bx2xk"]
+content_margin_left = 6.0
+content_margin_top = 4.0
+content_margin_right = 6.0
+content_margin_bottom = 4.0
+bg_color = Color(0.20272344, 0.20272332, 0.20272332, 0.6)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+corner_detail = 5
+shadow_size = 4
 
 [node name="HUD" type="CanvasLayer" unique_id=1730960279]
 script = ExtResource("1_0muis")
@@ -36,3 +75,27 @@ offset_left = 156.0
 offset_top = 11.0
 offset_right = 196.0
 offset_bottom = 34.0
+
+[node name="MarginContainer" type="MarginContainer" parent="VertAlign/MenuPanel" unique_id=2127954192]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.878
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 0.19995117
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_constants/margin_left = 0
+theme_override_constants/margin_top = 15
+theme_override_constants/margin_bottom = 15
+
+[node name="BtnEndTurn" type="Button" parent="VertAlign/MenuPanel/MarginContainer" unique_id=690431888]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 32
+theme_override_styles/normal = SubResource("StyleBoxFlat_0muis")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_ymj7e")
+theme_override_styles/hover = SubResource("StyleBoxFlat_bx2xk")
+text = "End Turn"
+
+[connection signal="pressed" from="VertAlign/MenuPanel/MarginContainer/BtnEndTurn" to="." method="_on_btn_end_turn_pressed"]

@@ -32,3 +32,9 @@ func _on_action_button_walk_pressed(type: CombatAction.ActionType) -> void:
 	if active_player == null:
 		return
 	active_player.select_action(type)
+
+
+func _on_btn_end_turn_pressed() -> void:
+	if active_player == null:
+		return
+	SignalBus.on_hud_player_end_turn.emit(active_player)

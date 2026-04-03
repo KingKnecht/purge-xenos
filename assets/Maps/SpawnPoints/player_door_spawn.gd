@@ -16,7 +16,8 @@ func spawn(player_idx : int) -> Player:
 	
 	player = Player.create(base_map, player_idx, 3, MapHelpers.pixel_to_cell(position), move_action)
 	self.add_child(player)	
-	player.current_cell = MapHelpers.pixel_to_cell(self.position)
+	var relative_pos = get_parent().to_local(self.global_position)   
+	player.current_cell = MapHelpers.pixel_to_cell(relative_pos)
 	animation_player.play("OpenDoor")
 	var anim_name = await animation_player.animation_finished
 	

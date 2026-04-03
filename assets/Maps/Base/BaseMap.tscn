@@ -29,7 +29,7 @@ map_floor = NodePath("../Floor")
 map_walls = NodePath("../Walls")
 map_interior = NodePath("../Interior")
 
-[node name="Spawnpoints" type="Node" parent="." unique_id=1076937073]
+[node name="Spawnpoints" type="Node2D" parent="." unique_id=38581738]
 script = ExtResource("6_v37n7")
 
 [node name="EnemySpawnPoint2" parent="Spawnpoints" unique_id=1787319171 node_paths=PackedStringArray("base_map") instance=ExtResource("6_7wvpd")]
@@ -42,6 +42,6 @@ position = Vector2(176, 144)
 gizmo_extents = 20.0
 base_map = NodePath("../..")
 
-[node name="PlayerDoorSpawn2" parent="Spawnpoints" unique_id=1989021728 node_paths=PackedStringArray("base_map") instance=ExtResource("8_pgybo")]
+[node name="PlayerDoorSpawn" parent="Spawnpoints" unique_id=1989021728 node_paths=PackedStringArray("base_map") instance=ExtResource("8_pgybo")]
 position = Vector2(16, 144)
 base_map = NodePath("../..")

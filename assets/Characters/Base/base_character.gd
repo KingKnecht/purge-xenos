@@ -57,7 +57,8 @@ func execute_action(target: Vector2i):
 	
 func move_delta(delta_cells : Vector2i):
 	var target = Vector2i(current_cell + delta_cells)
-	move([current_cell, target])	
+	var path = base_map.get_astar_path(current_cell, target)
+	move(path)	
 	
 func execute_move(target: Vector2i):
 	if is_moving:
@@ -114,9 +115,7 @@ func move(path : Array[Vector2i]):
 	print("Move was called")
 	if is_moving:
 		return
-	
-	print(path)
-	
+
 	is_moving = true
 	if path.size() <= 1:
 		is_moving = false

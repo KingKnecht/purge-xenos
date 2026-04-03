@@ -22,6 +22,8 @@ func _ready() -> void:
 	# sets the current battle_driver (self) at the global cursor manager
 	CursorManager.battle_driver = self
 	
+	SignalBus.on_hud_player_end_turn.connect(on_hud_player_end_turn)
+	
 	match current_group_type:
 		GroupTypes.PLAYERS: 
 			current_group.assign(Players)
@@ -46,10 +48,6 @@ func on_all_characters_spawned(players : Array[Player], enemies : Array[BaseChar
 
 func on_hud_is_ready() -> void:
 	pass
-	#current_character = Players[current_character_idx]
-	#current_group = Players
-	#SignalBus.on_character_begin_turn.emit(current_character)
-	#run_turn()
 			
 func next_turn():
 	current_character_idx += 1
@@ -93,3 +91,6 @@ func on_character_died(character : BaseCharacter) -> void :
 func _on_action_finished():
 	if current_character.action_count == 0:
 		next_turn()
+		
+func on_hud_player_end_turn(player : Player):
+	next_turn()

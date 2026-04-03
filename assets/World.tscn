@@ -7,7 +7,7 @@
 [node name="World" type="Node2D" unique_id=2008988094]
 
 [node name="Starfield" parent="." unique_id=1854515856 instance=ExtResource("1_nnxh6")]
-position = Vector2(-19, 62)
+position = Vector2(-654, -321)
 
 [node name="BaseMap" parent="." unique_id=1207446625 instance=ExtResource("3_yrx4r")]
 
