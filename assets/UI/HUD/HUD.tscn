@@ -1,7 +1,6 @@
 [gd_scene format=3 uid="uid://l3ahdws078cw"]
 
 [ext_resource type="Script" uid="uid://c0w0nnfa3trsc" path="res://assets/UI/HUD/hud.gd" id="1_0muis"]
-[ext_resource type="PackedScene" uid="uid://ykod7seiqehp" path="res://assets/World.tscn" id="2_ymj7e"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_sc1dx"]
 bg_color = Color(0.1254902, 0.1254902, 0.1254902, 1)
@@ -15,19 +14,6 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-
-[node name="WorldViewportContainer" type="SubViewportContainer" parent="VertAlign" unique_id=419654861]
-layout_mode = 2
-size_flags_vertical = 3
-
-[node name="WorldViewport" type="SubViewport" parent="VertAlign/WorldViewportContainer" unique_id=1880592979]
-handle_input_locally = false
-msaa_2d = 1
-canvas_item_default_texture_filter = 0
-size = Vector2i(1600, 750)
-render_target_update_mode = 4
-
-[node name="World" parent="VertAlign/WorldViewportContainer/WorldViewport" unique_id=2008988094 instance=ExtResource("2_ymj7e")]
 
 [node name="MenuPanel" type="Panel" parent="VertAlign" unique_id=1880548480]
 custom_minimum_size = Vector2(0, 100)

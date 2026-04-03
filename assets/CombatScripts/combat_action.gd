@@ -33,4 +33,4 @@ static func create_move_action(movement : int) -> Dictionary[ActionType, CombatA
 	var move = load(MOVE_ACTION_STR).duplicate()
 	move.display_name = "Move"
 	move.movement = movement
-	return  {ActionType : move}
+	return  {ActionType.MOVE : move}

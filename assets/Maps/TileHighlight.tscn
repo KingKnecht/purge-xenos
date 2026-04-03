@@ -4,6 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://3jkq4q15nr4j" path="res://assets/Materials/tile_highlight_rect_texture.png" id="2_p4qlu"]
 
 [node name="TileHighlight" type="Sprite2D" unique_id=1758861644]
+z_index = 1
 material = ExtResource("1_vffbp")
 scale = Vector2(3, 3)
 texture = ExtResource("2_p4qlu")
