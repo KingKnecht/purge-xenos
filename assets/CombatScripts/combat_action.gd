@@ -9,6 +9,9 @@ extends Resource
 @export var movement : int = 0
 @export var path : Array[Vector2i] = []
 @export var cost : int = 0
+@export_flags("SELF:1", "GROUP_MEMBERS:2", "OPPONENTS:4", "CELL:8") var valid_target_flags: int = 0
+
+const MOVE_ACTION_STR : String = "res://assets/CombatScripts/move.tres"
 
 enum ActionType{
 	NONE,
@@ -26,4 +29,8 @@ enum ValidTargetFlags {
 	CELL = 1 << 3,
 }
 
-@export_flags("SELF:1", "GROUP_MEMBERS:2", "OPPONENTS:4", "CELL:8") var valid_target_flags: int = 0
+static func create_move_action(movement : int) -> Dictionary[ActionType, CombatAction]:
+	var move = load(MOVE_ACTION_STR).duplicate()
+	move.display_name = "Move"
+	move.movement = movement
+	return  {ActionType : move}

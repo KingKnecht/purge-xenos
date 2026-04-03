@@ -20,13 +20,19 @@ func _process(delta: float) -> void:
 		sprite.play("idle_no_weapon" + sequence_suffix)
 
 ## Creates an instance of a pre-configured Player
-static func create(base_map : BaseMap, player_index : int, max_action_count : int, current_cell : Vector2i ) -> BaseCharacter:
-	var player =  PLAYER_SCENE.instantiate() as Player
-	player.base_map = base_map
-	player.player_index = player_index
-	player.max_action_count = max_action_count
-	player.current_cell = current_cell
-	return player
+static func create(base_map : BaseMap,
+	 player_index : int,
+	 max_action_count : int,
+	 current_cell : Vector2i, 
+	 combat_actions : Dictionary[CombatAction.ActionType, CombatAction] ) -> BaseCharacter:
+		
+		var player =  PLAYER_SCENE.instantiate() as Player
+		player.combat_actions = combat_actions
+		player.base_map = base_map
+		player.player_index = player_index
+		player.max_action_count = max_action_count
+		player.current_cell = current_cell
+		return player
 
 func start_turn():
 	action_count = max_action_count

@@ -12,8 +12,10 @@ class_name PlayerDoorSpawn
 var player : BaseCharacter
 
 func spawn(player_idx : int) -> Player:
-	player = Player.create(base_map, player_idx, 3, MapHelpers.pixel_to_cell(position))
-	#print(MapHelpers.pixel_to_cell(position))
+	var move_action = CombatAction.create_move_action(5)
+	#Todo .merge() Dictionaries if needed here
+	
+	player = Player.create(base_map, player_idx, 3, MapHelpers.pixel_to_cell(position), move_action)
 	$DummySpawnMarker.add_child(player)	
 	animation_player.play("OpenDoor")
 	var anim_name = await animation_player.animation_finished
@@ -22,8 +24,3 @@ func spawn(player_idx : int) -> Player:
 	door_sprite.play_close_door()
 	return player
 	
-#func _on_animation_player_animation_finished(anim_name: StringName) -> void:
-	#if anim_name == "OpenDoor":
-		#player.current_cell = MapHelpers.pixel_to_cell(self.position + $DummySpawnMarker.position)
-		#door_sprite.play_close_door()
-		#on_spawn_finished.emit(player)
