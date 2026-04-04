@@ -1,11 +1,13 @@
 [gd_resource type="Resource" script_class="CombatAction" format=3 uid="uid://d3nshxs4lelbg"]
 
 [ext_resource type="Script" uid="uid://bcseivrinftr5" path="res://assets/CombatScripts/combat_action.gd" id="1_ixsks"]
+[ext_resource type="Texture2D" uid="uid://0ibshv27kb18" path="res://assets/CombatScripts/Icons/move.png" id="1_t7i3q"]
 
 [resource]
 script = ExtResource("1_ixsks")
 display_name = "Move"
 description = "Moves the character"
 movement = 5
+icon = ExtResource("1_t7i3q")
 valid_target_flags = 8
 metadata/_custom_type_script = "uid://bcseivrinftr5"

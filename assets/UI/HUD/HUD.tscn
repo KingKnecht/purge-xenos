@@ -1,48 +1,11 @@
 [gd_scene format=3 uid="uid://l3ahdws078cw"]
 
 [ext_resource type="Script" uid="uid://c0w0nnfa3trsc" path="res://assets/UI/HUD/hud.gd" id="1_0muis"]
+[ext_resource type="Theme" uid="uid://dithlwvk8vpky" path="res://assets/UI/Themes/ActionButtonTheme.tres" id="2_bx2xk"]
+[ext_resource type="Texture2D" uid="uid://0ibshv27kb18" path="res://assets/CombatScripts/Icons/move.png" id="2_ymj7e"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_sc1dx"]
 bg_color = Color(0, 0, 0, 0.15294118)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0muis"]
-content_margin_left = 6.0
-content_margin_top = 4.0
-content_margin_right = 6.0
-content_margin_bottom = 4.0
-bg_color = Color(0.1, 0.1, 0.1, 0.6)
-corner_radius_top_left = 3
-corner_radius_top_right = 3
-corner_radius_bottom_right = 3
-corner_radius_bottom_left = 3
-corner_detail = 5
-shadow_size = 4
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ymj7e"]
-content_margin_left = 6.0
-content_margin_top = 4.0
-content_margin_right = 6.0
-content_margin_bottom = 4.0
-bg_color = Color(0.14767182, 0.14767179, 0.14767179, 0.6)
-corner_radius_top_left = 3
-corner_radius_top_right = 3
-corner_radius_bottom_right = 3
-corner_radius_bottom_left = 3
-corner_detail = 5
-shadow_size = 4
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bx2xk"]
-content_margin_left = 6.0
-content_margin_top = 4.0
-content_margin_right = 6.0
-content_margin_bottom = 4.0
-bg_color = Color(0.20272344, 0.20272332, 0.20272332, 0.6)
-corner_radius_top_left = 3
-corner_radius_top_right = 3
-corner_radius_bottom_right = 3
-corner_radius_bottom_left = 3
-corner_detail = 5
-shadow_size = 4
 
 [node name="HUD" type="CanvasLayer" unique_id=1730960279]
 script = ExtResource("1_0muis")
@@ -66,17 +29,37 @@ layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_sc1dx")
 
 [node name="ActionButtons" type="HBoxContainer" parent="VertAlign/MenuPanel" unique_id=487786831]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
+custom_minimum_size = Vector2(160, 64)
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 0.1
+anchor_bottom = 1.0
+offset_left = 25.0
+offset_top = 21.0
+offset_right = 25.0
+offset_bottom = -15.0
 mouse_filter = 2
 
 [node name="LabelActionCount" type="Label" parent="VertAlign/MenuPanel" unique_id=193650545]
 layout_mode = 0
-offset_left = 156.0
-offset_top = 11.0
-offset_right = 196.0
-offset_bottom = 34.0
+offset_left = 243.0
+offset_top = 6.0
+offset_right = 448.0
+offset_bottom = 29.0
+text = "Remaining action points: x"
+
+[node name="DummyTestButton" type="Button" parent="VertAlign/MenuPanel" unique_id=1036344981]
+visible = false
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 0
+offset_left = 1354.0
+offset_top = 15.0
+offset_right = 1418.0
+offset_bottom = 79.0
+size_flags_horizontal = 4
+theme = ExtResource("2_bx2xk")
+theme_override_icons/icon = ExtResource("2_ymj7e")
+expand_icon = true
 
 [node name="MarginContainer" type="MarginContainer" parent="VertAlign/MenuPanel" unique_id=2127954192]
 layout_mode = 1
@@ -94,10 +77,7 @@ theme_override_constants/margin_bottom = 15
 [node name="BtnEndTurn" type="Button" parent="VertAlign/MenuPanel/MarginContainer" unique_id=690431888]
 layout_mode = 2
 size_flags_horizontal = 4
-theme_override_font_sizes/font_size = 32
-theme_override_styles/normal = SubResource("StyleBoxFlat_0muis")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_ymj7e")
-theme_override_styles/hover = SubResource("StyleBoxFlat_bx2xk")
+theme = ExtResource("2_bx2xk")
 text = "End Turn"
 
 [connection signal="pressed" from="VertAlign/MenuPanel/MarginContainer/BtnEndTurn" to="." method="_on_btn_end_turn_pressed"]

@@ -55,12 +55,12 @@ func _unhandled_input(event: InputEvent) -> void:
 		return
 	
 	_display_selected_action(event)
-	print("unhandled")
 		
 func _display_selected_action(event: InputEvent):
 	if battle_driver.current_character.action_count > 0:
-		display_path_dots(event)
-		display_attack_highlight(event)
+		if battle_driver.current_character is Player:
+			display_path_dots(event)
+			display_attack_highlight(event)
 
 func display_path_dots(event: InputEvent):
 	if battle_driver.current_character.is_moving:

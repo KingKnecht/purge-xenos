@@ -9,6 +9,7 @@ extends Resource
 @export var movement : int = 0
 @export var path : Array[Vector2i] = []
 @export var cost : int = 0
+@export var icon : Texture2D
 @export_flags("SELF:1", "GROUP_MEMBERS:2", "OPPONENTS:4", "CELL:8") var valid_target_flags: int = 0
 
 const MOVE_ACTION_STR : String = "res://assets/CombatScripts/move.tres"
