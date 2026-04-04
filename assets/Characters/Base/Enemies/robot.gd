@@ -31,7 +31,13 @@ func _on_pre_begin_turn():
 	# Magic AI which provide fully fleshed out actions
 	selected_action = combat_actions[combat_actions.keys()[idx]]
 	var player : BaseCharacter = $"../Player"
-	selected_action.path = base_map.get_astar_path(current_cell, player.current_cell, true)
+	var path = base_map.get_astar_path(current_cell, player.current_cell, true)
+	
+	print(path)
+	if path.size() > selected_action.movement + 1:
+		path = path.slice(0, selected_action.movement + 1) 
+		print(path)
+	selected_action.path = path
 	
 	SignalBus.enemy_selected_action.emit(self, selected_action)
 	
