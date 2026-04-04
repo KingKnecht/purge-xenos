@@ -15,3 +15,5 @@ position = Vector2(0, -21)
 
 [node name="AttackHighlight" parent="." unique_id=495309528 instance=ExtResource("3_7d51c")]
 visible = false
+
+[node name="EnemyPathDots" type="Node" parent="." unique_id=1752539626]

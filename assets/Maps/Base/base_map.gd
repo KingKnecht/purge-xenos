@@ -25,13 +25,13 @@ func get_astar_path(from : Vector2i, to : Vector2i, partial_path : bool = false)
 	return path
 
 func on_all_characters_spawned(players : Array[Player], enemies : Array[BaseCharacter]) : 
+	pass
+	#for enemy in enemies:
+		#enemy.reparent(self, true)
+		#enemy.set_owner(self)
 	
-	for enemy in enemies:
-		enemy.reparent(self, true)
-		enemy.set_owner(self)
-	
-	for player in players:
-		player.reparent(self, true)
-		player.set_owner(self)	
+	#for player in players:
+		#player.reparent(self)
+		#player.set_owner(self)	
 
 	

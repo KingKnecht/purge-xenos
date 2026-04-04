@@ -12,14 +12,17 @@ var player : BaseCharacter
 
 func spawn(player_idx : int) -> Player:
 	var move_action = CombatAction.create_move_action(5)
-	#Todo .merge() Dictionaries if needed here
+	# Todo: .merge() Dictionaries if needed here
+
+	var relative_pos = get_parent().to_local(position)   
+	var relative_cell = MapHelpers.pixel_to_cell(relative_pos)
+	player = Player.create(base_map, player_idx, 3, relative_cell , move_action)
 	
-	player = Player.create(base_map, player_idx, 3, MapHelpers.pixel_to_cell(position), move_action)
-	self.add_child(player)	
-	var relative_pos = get_parent().to_local(self.global_position)   
-	player.current_cell = MapHelpers.pixel_to_cell(relative_pos)
+	base_map.add_child(player)
+	
+	player.position = relative_pos
 	animation_player.play("OpenDoor")
-	var anim_name = await animation_player.animation_finished
+	await animation_player.animation_finished
 	
 	door_sprite.play_close_door()
 	return player

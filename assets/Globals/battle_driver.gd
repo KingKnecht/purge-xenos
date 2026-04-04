@@ -11,7 +11,7 @@ enum GroupTypes {
 
 signal battle_won(who : GroupTypes)
 
-var current_group_type : GroupTypes = GroupTypes.PLAYERS
+var current_group_type : GroupTypes = GroupTypes.ENEMIES
 var current_group : Array[BaseCharacter]
 var current_character : BaseCharacter
 var current_character_idx = 0
@@ -44,6 +44,8 @@ func on_all_characters_spawned(players : Array[Player], enemies : Array[BaseChar
 		
 	SignalBus.battle_started.emit()
 	SignalBus.on_character_begin_turn.emit(current_character)
+	SignalBus.pre_begin_turn.emit()
+	
 	run_turn()
 
 
@@ -62,6 +64,8 @@ func next_turn():
 		elif current_group_type == GroupTypes.ENEMIES:
 			current_group_type = GroupTypes.PLAYERS
 			current_group.assign(Players)
+			SignalBus.pre_begin_turn.emit()
+			
 		current_character_idx = 0
 	
 	current_character.action_finished.disconnect(_on_action_finished)
