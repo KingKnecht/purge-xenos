@@ -149,6 +149,6 @@ func display_attack_highlight(target_cell : Vector2i):
 			for enemy in battle_driver.Enemies:
 				if enemy.current_cell == target_cell:
 					on_valid_target = true
-											
+					
 	attack_highlight.position = MapHelpers.cell_to_pixel(target_cell)
 	attack_highlight.visible = on_valid_target
