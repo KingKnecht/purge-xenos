@@ -13,6 +13,7 @@ extends Resource
 @export_flags("SELF:1", "GROUP_MEMBERS:2", "OPPONENTS:4", "CELL:8") var valid_target_flags: int = 0
 
 const MOVE_ACTION_STR : String = "res://assets/CombatScripts/move.tres"
+const PEWPEW_ACTION_STR : String = "res://assets/CombatScripts/pew_pew.tres"
 
 enum ActionType{
 	NONE,
@@ -31,7 +32,10 @@ enum ValidTargetFlags {
 }
 
 static func create_move_action(movement : int) -> Dictionary[ActionType, CombatAction]:
-	var move = load(MOVE_ACTION_STR).duplicate()
-	move.display_name = "Move"
+	var move = load(MOVE_ACTION_STR).duplicate() as CombatAction
 	move.movement = movement
 	return  {ActionType.MOVE : move}
+	
+static func create_pewpew_action() -> Dictionary[ActionType, CombatAction]:
+	var pewpew = load(PEWPEW_ACTION_STR).duplicate() as CombatAction
+	return  {ActionType.PEW_PEW : pewpew}

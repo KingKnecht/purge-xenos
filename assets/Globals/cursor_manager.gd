@@ -146,13 +146,9 @@ func display_attack_highlight(target_cell : Vector2i):
 	if EnumHelpers.has_flag(
 		battle_driver.current_character.selected_action.valid_target_flags, 
 		CombatAction.ValidTargetFlags.OPPONENTS):
-			if battle_driver.current_character.is_player:
-				for enemy in battle_driver.Enemies:
-					if enemy.current_cell == target_cell:
-						on_valid_target = true
-						
-	#if event.button_mask & MouseButton.MOUSE_BUTTON_LEFT and on_valid_targ:
-		#battle_driver.current_character.execute_action(target_cell)
-						
+			for enemy in battle_driver.Enemies:
+				if enemy.current_cell == target_cell:
+					on_valid_target = true
+											
 	attack_highlight.position = MapHelpers.cell_to_pixel(target_cell)
 	attack_highlight.visible = on_valid_target

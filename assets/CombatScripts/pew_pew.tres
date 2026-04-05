@@ -1,12 +1,14 @@
 [gd_resource type="Resource" script_class="CombatAction" format=3 uid="uid://c3vo0if8yieak"]
 
 [ext_resource type="Script" uid="uid://bcseivrinftr5" path="res://assets/CombatScripts/combat_action.gd" id="1_8u41q"]
+[ext_resource type="Texture2D" uid="uid://4mnnauf6mek5" path="res://assets/CombatScripts/Icons/gun_pistol.png" id="1_v7bqk"]
 
 [resource]
 script = ExtResource("1_8u41q")
 display_name = "Pew-Pew"
 description = "Shoots at target"
 damage = 1
-action_type = 4
+cost = 1
+icon = ExtResource("1_v7bqk")
 valid_target_flags = 4
 metadata/_custom_type_script = "uid://bcseivrinftr5"

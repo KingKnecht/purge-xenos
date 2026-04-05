@@ -58,6 +58,7 @@ offset_bottom = 26.0
 text = "Remaining action points: x"
 
 [node name="DummyTestButton" type="Button" parent="VertAlign/MenuPanel" unique_id=1036344981]
+visible = false
 custom_minimum_size = Vector2(64, 64)
 layout_mode = 0
 offset_left = 1354.0

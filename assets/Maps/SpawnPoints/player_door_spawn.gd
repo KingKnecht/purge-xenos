@@ -11,12 +11,16 @@ class_name PlayerDoorSpawn
 var player : BaseCharacter
 
 func spawn(player_idx : int) -> Player:
+	
 	var move_action = CombatAction.create_move_action(5)
-	# Todo: .merge() Dictionaries if needed here
+	var pewpew_action = CombatAction.create_pewpew_action()
+	var actions : Dictionary[CombatAction.ActionType, CombatAction]= {}
+	actions.merge(move_action)
+	actions.merge(pewpew_action)
 
 	var relative_pos = get_parent().to_local(position)   
 	var relative_cell = MapHelpers.pixel_to_cell(relative_pos)
-	player = Player.create(base_map, player_idx, 3, relative_cell , move_action)
+	player = Player.create(base_map, player_idx, 3, relative_cell , actions)
 	
 	base_map.add_child(player)
 	

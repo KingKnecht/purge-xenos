@@ -26,17 +26,20 @@ func on_character_begin_turn(player : BaseCharacter) -> void:
 	active_player = player
 	for button in container_action_buttons.get_children():
 		button.queue_free()
-		
+	
+	var btn_group = ButtonGroup.new()
 	for action_type in active_player.combat_actions:
 		var action = active_player.combat_actions[action_type]
 		var button = Button.new()
+		button.button_group = btn_group # Put in group for toggle mutually exclusive
 		button.theme = action_button_theme
 		container_action_buttons.add_child(button)
 		button.toggle_mode = true
 		button.expand_icon = true	
+		button.tooltip_text = action.description
 		button.size = Vector2(64.0,64.0)
 		button.custom_minimum_size = Vector2(64.0,64.0)
-		button.icon = ResourceLoader.load("res://assets/CombatScripts/Icons/move.png")
+		button.icon = action.icon
 		button.toggled.connect(_on_action_button_toggled.bind(action_type))
 		
 		
