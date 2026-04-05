@@ -5,3 +5,9 @@
 
 [node name="Robot" unique_id=1271547261 instance=ExtResource("1_dfmki")]
 script = ExtResource("2_7tnvx")
+
+[node name="AnimatedSprite2D" parent="." index="0" unique_id=487185866]
+modulate = Color(0.53949916, 0.36312985, 0.29004326, 1)
+
+[node name="CollisionShape2D" parent="Area2D" parent_id_path=PackedInt32Array(912974100) index="0" unique_id=1483359726]
+visible = false
