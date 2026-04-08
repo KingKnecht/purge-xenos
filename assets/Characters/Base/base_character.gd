@@ -18,7 +18,16 @@ class_name BaseCharacter
 var base_map: BaseMap		
 var Direction : Directions.Points = Directions.Points.EAST
 var combat_actions : Dictionary[CombatAction.ActionType, CombatAction]
-var selected_action : CombatAction
+
+var selected_action : CombatAction:
+	set(value):		
+		if selected_action == value:
+			return
+		selected_action = value
+	get:
+		return selected_action
+
+
 var action_count: int = 0
 var idling_bot = false
 var is_moving = false
@@ -110,7 +119,7 @@ func tween_movement(path : Array[Vector2i]):
 		move_tween.tween_property(self, "position", pixel_step, 0.2)
 	
 	move_tween.tween_callback(func(): is_moving = false)
-	move_tween.tween_callback(func(): SignalBus.action_executed.emit(self))
+	#move_tween.tween_callback(func(): SignalBus.after_action_executed.emit(self, selected_action))
 	move_tween.tween_callback(func(): current_cell = path[-1])
 
 func update_current_cell():
@@ -129,10 +138,7 @@ func move(path : Array[Vector2i]):
 	tween_movement(path)
 	
 func execute_attack(target: Vector2i):
-	print("Attacked %s" % target)
-	#action_finished.emit()
-	SignalBus.action_executed.emit(self)
-
+	pass
 
 func calc_direction(from : Vector2i, to: Vector2i):
 	Direction = Directions.vector_to_direction(to - from)

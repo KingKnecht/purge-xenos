@@ -20,10 +20,8 @@ func spawn(player_idx : int) -> Player:
 
 	var relative_pos = get_parent().to_local(position)   
 	var relative_cell = MapHelpers.pixel_to_cell(relative_pos)
-	player = Player.create(base_map, player_idx, 3, relative_cell , actions)
-	
+	player = Player.create(base_map, player_idx, 3, relative_cell , actions)	
 	base_map.add_child(player)
-	
 	player.position = relative_pos
 	animation_player.play("OpenDoor")
 	await animation_player.animation_finished

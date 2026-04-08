@@ -10,7 +10,7 @@ var action_button_theme : Resource
 func _ready() -> void:
 	SignalBus.on_character_begin_turn.connect(on_character_begin_turn)
 	SignalBus.on_hud_is_ready.emit()
-	SignalBus.action_executed.connect(_on_action_executed)
+	SignalBus.after_action_executed.connect(_on_after_action_executed)
 	action_button_theme = load("res://assets/UI/Themes/ActionButtonTheme.tres")
 	
 func _process(_delta: float) -> void:
@@ -51,7 +51,7 @@ func _on_action_button_toggled(toggled: bool, type: CombatAction.ActionType) -> 
 	else:
 		active_player.deselect_action()
 		
-func _on_action_executed(character : BaseCharacter):
+func _on_after_action_executed(character : BaseCharacter, action : CombatAction):
 	if character != active_player:
 		return
 		

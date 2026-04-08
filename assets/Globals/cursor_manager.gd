@@ -6,6 +6,7 @@ extends Node
 @onready var tile_highlight = $TileHighlight
 @onready var path_dots = $PathDots
 @onready var attack_dots = $AttackDots
+@onready var attack_lines = $AttackLines
 
 var _is_cell_targeted = false
 var _current_targeted_cell: Vector2i
@@ -24,6 +25,8 @@ var dot_material_unreachable = ShaderMaterial.new()
 var path_dots_dict : Dictionary[BaseCharacter, Array] = {}
 # Key: Character. Value: Array of Node2D
 var attack_dots_dict : Dictionary[BaseCharacter, Array] = {}
+# Key: Character. Value: Array of Line2D
+var attack_lines_dict : Dictionary[BaseCharacter, Line2D] = {}
 
 func _ready() -> void:
 	dot_material_reachable.shader = PATH_HIGHLIGHT_SHADER
@@ -33,10 +36,10 @@ func _ready() -> void:
 	
 	SignalBus.map_initialized.connect(func(map): base_map = map)
 	SignalBus.battle_driver_initialized.connect(func(driver): battle_driver = driver)
-	SignalBus.enemy_selected_action.connect(_on_enemy_selected_action)
 	SignalBus.on_all_characters_spawned.connect(_on_all_characters_spawned)
-	SignalBus.action_executed.connect(_on_action_executed)
-
+	SignalBus.display_line_of_sight.connect(_on_display_line_of_sight)
+	SignalBus.enemy_selected_action.connect(_on_enemy_selected_action)
+	
 func _process(_delta: float) -> void:
 	if base_map == null:
 		return
@@ -54,6 +57,10 @@ func _on_all_characters_spawned(players : Array[Player], enemies : Array[BaseCha
 	for x in players + enemies:
 		path_dots_dict[x] = []
 		attack_dots_dict[x] = []
+		
+
+	SignalBus.after_action_executed.connect(_on_after_action_executed)
+	
 	
 func _unhandled_input(event: InputEvent) -> void:
 	#assert(battle_driver != null)
@@ -88,9 +95,32 @@ func _on_enemy_selected_action(enemy : BaseCharacter, action : CombatAction):
 	print("Show action of enemy: %s" % str(action.display_name))
 	#display_enemy_path_dots(action.path)
 	_update_path_dots(enemy, action.path, action.movement)
-	display_attack_highlight(enemy, action.targeted_cells[0])
+	_hide_line_of_sight(enemy)
+	if action.needs_line_of_sight:
+		_on_display_line_of_sight(enemy, enemy.current_cell, action.targeted_cells[0])
 	
+func _hide_line_of_sight(enemy : BaseCharacter):
+	if attack_lines_dict.has(enemy):
+		attack_lines_dict[enemy].visible = false
+	
+func _on_display_line_of_sight(enemy : BaseCharacter, from : Vector2i, to: Vector2i):
+	if attack_lines_dict.has(enemy):
+		var line = attack_lines_dict[enemy] as Line2D
+		line.clear_points()
+		line.add_point(MapHelpers.cell_to_pixel(from))
+		line.add_point(MapHelpers.cell_to_pixel(to))
+	else:
+		var line = Line2D.new()
+		line.z_index = 1
+		line.width = 1.0
+		line.default_color = Color.RED
+		line.add_point(MapHelpers.cell_to_pixel(from))
+		line.add_point(MapHelpers.cell_to_pixel(to))
+		attack_lines.add_child(line)
+		attack_lines_dict[enemy] = line
 
+	attack_lines_dict[enemy].visible = true
+	
 func display_path_dots(character : BaseCharacter, cell : Vector2i):
 	if character.is_moving:
 		return
@@ -137,7 +167,7 @@ func _update_path_dots(character : BaseCharacter, path: Array[Vector2i], movemen
 			else:
 				dot.visible = false
 
-func _on_action_executed(character : BaseCharacter):
+func _on_after_action_executed(character : BaseCharacter, action : CombatAction):
 		if character == battle_driver.current_character:
 			for child in attack_dots_dict[character]:
 				(child as Node2D).visible = false

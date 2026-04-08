@@ -13,3 +13,5 @@ position = Vector2(0, -21)
 [node name="PathDots" type="Node" parent="." unique_id=1588290547]
 
 [node name="AttackDots" type="Node" parent="." unique_id=1636057666]
+
+[node name="AttackLines" type="Node" parent="." unique_id=1777834356]

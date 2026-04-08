@@ -40,10 +40,12 @@ func start_turn():
 
 func execute_action(target: Vector2i):
 	action_count -= 1
-
+	
+	SignalBus.before_action_executed.emit(self, selected_action)
+	
 	if selected_action.movement > 0:
 		execute_move(target)
 	if selected_action.damage > 0:
 		execute_attack(target)
 		
-	SignalBus.action_executed.emit(self)
+	SignalBus.after_action_executed.emit(self,selected_action)

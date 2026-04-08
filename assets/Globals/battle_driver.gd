@@ -23,7 +23,7 @@ func _ready() -> void:
 	SignalBus.main_init_finished.connect(func(): 
 		SignalBus.battle_driver_initialized.emit(self))
 	
-	SignalBus.action_executed.connect(_on_action_executed)
+	SignalBus.after_action_executed.connect(_on_after_action_executed)
 	SignalBus.on_hud_player_end_turn.connect(on_hud_player_end_turn)
 	
 	match current_group_type:
@@ -99,7 +99,7 @@ func on_character_died(character : BaseCharacter) -> void :
 		is_battle_running = false
 		battle_won.emit(GroupTypes.ENEMIES)
 
-func _on_action_executed(character : BaseCharacter):
+func _on_after_action_executed(character : BaseCharacter, action : CombatAction):
 	if current_character == null:
 		# In case that there is a "cut scene" like the movement after player spawn
 		# there will be no current_character, because the action wasn't driven by the battle_driver

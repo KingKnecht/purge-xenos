@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="CombatAction" format=3 uid="uid://twwb0dwlevre"]
+
+[ext_resource type="Script" uid="uid://bcseivrinftr5" path="res://assets/CombatScripts/combat_action.gd" id="1_23onp"]
+
+[resource]
+script = ExtResource("1_23onp")
+display_name = "Wait"
+description = "A no operation action for enemies"
+damage = null
+heal = null
+movement = null
+path = null
+targeted_cells = null
+cost = null
+action_is_locked = null
+needs_line_of_sight = null
+weapon_range = null
+cool_down = null
+valid_target_flags = null
+metadata/_custom_type_script = "uid://bcseivrinftr5"

@@ -29,3 +29,10 @@ func on_hud_is_ready():
 			players.append(player)
 
 	SignalBus.on_all_characters_spawned.emit(players, enemies)
+	
+	#IS there a better place to do this?
+	for player in players:
+		SignalBus.after_action_executed.emit(player, player.selected_action)
+	
+	for enemy in enemies:
+		SignalBus.after_action_executed.emit(enemy, enemy.selected_action)

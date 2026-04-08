@@ -13,6 +13,19 @@ func _process(delta: float) -> void:
 		execute_action(Vector2i(0, 0))
 		idling_bot = false
 
+func _ready() -> void:
+	SignalBus.before_action_executed.connect(_on_before_action_executed)
+	SignalBus.after_action_executed.connect(_on_after_action_executed)
+
+func _on_before_action_executed(character : BaseCharacter, action : CombatAction):
+	if character != self:
+		selected_action = combat_actions[CombatAction.ActionType.WAIT]
+		SignalBus.enemy_selected_action.emit(self, selected_action)
+	
+func _on_after_action_executed(character : BaseCharacter, action : CombatAction):
+	selected_action = ai_select_action()
+	SignalBus.enemy_selected_action.emit(self, selected_action)
+
 ## Creates an instance of a pre-configured Robot
 static func create(base_map : BaseMap, max_action_count : int, current_cell : Vector2i) -> BaseCharacter:
 	var robot =  ROBOT_SCENE.instantiate() as Robot
@@ -23,19 +36,31 @@ static func create(base_map : BaseMap, max_action_count : int, current_cell : Ve
 	var actions : Dictionary[CombatAction.ActionType, CombatAction] = {}
 	var move = CombatAction.create_move_action(5)
 	var pewpew = CombatAction.create_pewpew_action()
+	var wait = CombatAction.create_wait_action()
 	actions.merge(move)
 	actions.merge(pewpew)
+	actions.merge(wait)
 	
 	robot.combat_actions = actions
 	return robot
 
 func ai_select_action() -> CombatAction:
-	var idx : int = randi_range(0, combat_actions.size() - 1)
+	#var idx : int = randi_range(0, combat_actions.size() - 1)
 	
 	# Magic AI which provide fully fleshed out actions
-	var action = combat_actions[combat_actions.keys()[idx]]
+	var action : CombatAction
 	var player : BaseCharacter = $"../Player"
-	action.targeted_cells = [player.current_cell] as Array[Vector2i]
+	var lines_of_sights = base_map.get_los_to_enemies(current_cell, player.get_groups()[0]) #Currently there is only 1 group.
+	if lines_of_sights.size() > 0:
+		var nearest_los = lines_of_sights.reduce(func(a, b): return a if Vector2(a[0], a[1]).length_squared() < Vector2(b[0], b[1]).length_squared() else b)
+		var pewpews = combat_actions.values().filter(func(a : CombatAction): return a.action_type == CombatAction.ActionType.PEW_PEW)
+		if pewpews.size() > 0:
+			action = pewpews[0]
+			action.targeted_cells = [MapHelpers.pixel_to_cell(nearest_los[1])] # [1] is the target of the LoS
+				
+	if action == null:
+		action = combat_actions[combat_actions.keys()[0]] # Move action
+		action.targeted_cells = [player.current_cell] as Array[Vector2i]
 	
 	var path = base_map.get_astar_path(current_cell, player.current_cell, true)
 	if path.size() > action.movement + 1:
@@ -65,10 +90,10 @@ func execute_action(target: Vector2i):
 	
 	if EnumHelpers.has_flag(CombatAction.ValidTargetFlags.SELF, selected_action.valid_target_flags):
 		print("Enemy has done: %s" % selected_action.display_name)
-		SignalBus.action_executed.emit(self)
+		SignalBus.after_action_executed.emit(self,selected_action)
 	elif EnumHelpers.has_flag(CombatAction.ValidTargetFlags.OPPONENTS, selected_action.valid_target_flags):
 		print("Enemy has done: %s" % selected_action.display_name)
-		SignalBus.action_executed.emit(self)
+		SignalBus.after_action_executed.emit(self,selected_action)
 	elif EnumHelpers.has_flag(CombatAction.ValidTargetFlags.CELL, selected_action.valid_target_flags):
-		SignalBus.action_executed.emit(self)
 		print("Enemy has done: %s" % selected_action.display_name)
+		SignalBus.after_action_executed.emit(self,selected_action)
