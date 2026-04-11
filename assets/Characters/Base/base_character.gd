@@ -1,8 +1,8 @@
 extends Marker2D
 class_name BaseCharacter
 
-#signal action_finished
-
+@onready var action_point_bar = $ActionPointsBar as ActionPointsBar
+@onready var sprite = $AnimatedSprite2D
 
 @export var current_cell : Vector2i:
 	set(value):
@@ -36,15 +36,13 @@ var action_count: int:
 		if value == action_count:
 			return
 		action_count = value
+		action_point_bar.set_points(action_count)
 		Log.debug("Action count of '%s' is: %d" % [self, action_count])
 	get:
 		return action_count
-		
-var idling_bot : bool= false
+
 var is_moving : bool= false
 var has_battle_started : bool = false
-
-@onready var sprite = $AnimatedSprite2D
 
 const DIRECTION_SUFFIXES: = {
 	Directions.Points.NORTH: "_N",
@@ -64,7 +62,7 @@ const DIRECTION_SUFFIXES: = {
 func _on_battle_started():
 		Log.debug("Battle started, character %s can start acting" % str(self))
 		has_battle_started = true
-
+		
 func _process(_delta: float) -> void:
 	pass
 				

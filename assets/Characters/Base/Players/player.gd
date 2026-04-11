@@ -8,6 +8,8 @@ var max_action_count
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	# Make shader unique
+	action_point_bar.material = action_point_bar.material.duplicate()
 	pass # Replace with function body.
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -26,7 +28,7 @@ static func create(base_map : BaseMap,
 	 current_cell : Vector2i, 
 	 combat_actions : Dictionary[CombatAction.ActionType, CombatAction] ) -> BaseCharacter:
 		
-		var player =  PLAYER_SCENE.instantiate() as Player
+		var player =  PLAYER_SCENE.instantiate() as Player		
 		player.combat_actions = combat_actions
 		player.base_map = base_map
 		player.player_index = player_index

@@ -15,6 +15,9 @@ func _process(delta: float) -> void:
 		#idling_bot = false
 
 func _ready() -> void:
+	# Make shader unique
+	action_point_bar.material = action_point_bar.material.duplicate()
+	
 	SignalBus.before_action_executed.connect(_on_before_action_executed)
 	SignalBus.after_action_executed.connect(_on_after_action_executed)
 	SignalBus.battle_started.connect(_on_battle_started)
@@ -76,7 +79,6 @@ func ai_select_action() -> CombatAction:
 		
 	action.path = path
 
-
 	return action
 
 func _on_pre_begin_turn():
@@ -85,6 +87,7 @@ func _on_pre_begin_turn():
 	
 func start_turn():
 	Log.debug("Turn started for '%s'" % [self])
+	action_point_bar.set_max_points(max_action_count)
 	action_count = max_action_count
 	
 	while action_count > 0:
