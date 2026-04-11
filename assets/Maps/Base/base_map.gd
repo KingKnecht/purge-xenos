@@ -1,8 +1,10 @@
 extends Node2D
 class_name BaseMap
 
+const CELL_DEBUG_LABEL_SCENE : PackedScene = preload("uid://s05eepwpbj7e")
+
 @export var pathfind: Pathfind
-var cell_debug_label_scene : PackedScene = preload("uid://s05eepwpbj7e")
+@export var show_debug_cells : bool = false
 
 @onready var map_floor: MapFloor = $Floor
 @onready var map_walls: Node2D = $Walls
@@ -13,11 +15,11 @@ func _ready():
 	SignalBus.main_init_finished.connect(func(): 
 		SignalBus.map_initialized.emit(self))
 	
-	if Log.get_log_level() == Log.Levels.DEBUG:
+	if show_debug_cells:
 		Log.debug("Cell coordinates logging is on!")
 		for x in map_floor.get_used_rect().size.x:
 			for y in map_floor.get_used_rect().size.y:
-				var cell_debug_label = cell_debug_label_scene.instantiate() as CellDebugLabel
+				var cell_debug_label = CELL_DEBUG_LABEL_SCENE.instantiate() as CellDebugLabel
 				cell_debug_label.current_cell = Vector2i(x,y)
 				cell_debug_label.position = MapHelpers.cell_to_pixel(cell_debug_label.current_cell)
 				self.add_child(cell_debug_label)
