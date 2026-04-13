@@ -15,9 +15,6 @@ func _process(delta: float) -> void:
 		#idling_bot = false
 
 func _ready() -> void:
-	# Make shader unique
-	action_point_bar.material = action_point_bar.material.duplicate()
-	
 	SignalBus.before_action_executed.connect(_on_before_action_executed)
 	SignalBus.after_action_executed.connect(_on_after_action_executed)
 	SignalBus.battle_started.connect(_on_battle_started)

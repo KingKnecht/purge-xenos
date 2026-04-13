@@ -3,7 +3,8 @@ class_name ActionPointsBar
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	pass
+	# Make shader unique
+	material = material.duplicate()
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.

@@ -6,12 +6,6 @@ const PLAYER_SCENE : PackedScene = preload("res://assets/Characters/Base/Players
 var player_index : int
 var max_action_count
 
-# Called when the node enters the scene tree for the first time.
-func _ready() -> void:
-	# Make shader unique
-	action_point_bar.material = action_point_bar.material.duplicate()
-	pass # Replace with function body.
-
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	var sequence_suffix: String = DIRECTION_SUFFIXES.get(Direction, "_E") 
