@@ -4,7 +4,7 @@ signal finished
 
 @export var target_width = 32
 @export var target_height = 32
-@export var speed: float = 500.0
+@export var speed: float = 250.0
 
 func _ready() -> void:
 	var texture_size = texture.get_size()

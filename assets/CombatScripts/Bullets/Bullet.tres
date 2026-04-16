@@ -1,0 +1,8 @@
+[gd_resource type="VisualShader" format=3 uid="uid://b1pksboqnkikt"]
+
+[resource]
+mode = 2
+flags/collision_use_scale = false
+flags/disable_force = false
+flags/disable_velocity = false
+flags/keep_data = false

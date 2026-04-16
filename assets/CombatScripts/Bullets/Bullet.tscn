@@ -3,22 +3,35 @@
 [ext_resource type="Texture2D" uid="uid://6jixv5shvcgf" path="res://assets/CombatScripts/Bullets/Textures/bullet_01.png" id="1_idqqs"]
 [ext_resource type="Script" uid="uid://bsaylfbecn8ve" path="res://assets/CombatScripts/Bullets/bullet.gd" id="2_qn30x"]
 
+[sub_resource type="Curve" id="Curve_idqqs"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.019921899), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_qn30x"]
+curve = SubResource("Curve_idqqs")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_idqqs"]
+particle_flag_disable_z = true
+emission_shape = 1
+emission_sphere_radius = 1.0
+direction = Vector3(-1, 0, 0)
+spread = 3.0
+initial_velocity_min = 100.0
+initial_velocity_max = 500.0
+gravity = Vector3(0, 0, 0)
+attractor_interaction_enabled = false
+scale_min = 3.0
+scale_max = 3.0
+scale_curve = SubResource("CurveTexture_qn30x")
+color = Color(0.46666667, 0.8862745, 0.99215686, 1)
+
 [node name="Bullet" type="Sprite2D" unique_id=933538373]
 texture = ExtResource("1_idqqs")
 script = ExtResource("2_qn30x")
 target_width = 64
 target_height = 64
 
-[node name="CPUParticles2D" type="CPUParticles2D" parent="." unique_id=2067733055]
-amount = 16
-lifetime = 3.0
-emission_shape = 1
-emission_sphere_radius = 14.51
-direction = Vector2(-1, 0)
-spread = 38.01
-gravity = Vector2(-500, 0)
-initial_velocity_min = 2.93
-initial_velocity_max = 32.25
-scale_amount_min = 2.0
-scale_amount_max = 4.0
-color = Color(0.45882353, 0.8666667, 0.9882353, 1)
+[node name="GPUParticles2D" type="GPUParticles2D" parent="." unique_id=1064064434]
+amount = 500
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_idqqs")
