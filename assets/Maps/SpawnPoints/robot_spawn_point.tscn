@@ -5,3 +5,5 @@
 [node name="EnemySpawnPoint" type="Marker2D" unique_id=165899254]
 gizmo_extents = 50.0
 script = ExtResource("1_gd1kw")
+max_health = 3
+max_action_count = 2

@@ -34,10 +34,12 @@ func _on_after_action_executed(character: BaseCharacter, action: CombatAction):
 		SignalBus.enemy_selected_action.emit(self , selected_action)
 
 ## Creates an instance of a pre-configured Robot
-static func create(base_map: BaseMap, max_action_count: int, current_cell: Vector2i) -> BaseCharacter:
+static func create(base_map: BaseMap, max_action_count: int, max_health : int, current_cell: Vector2i) -> BaseCharacter:
 	var robot = ROBOT_SCENE.instantiate() as Robot
 	robot.base_map = base_map
-	#robot.max_action_count = max_action_count
+	robot.max_action_count = max_action_count
+	robot.max_health = max_health
+	robot.action_count = max_action_count
 	robot.current_cell = current_cell
 	
 	var actions: Dictionary[CombatAction.ActionType, CombatAction] = {}

@@ -4,6 +4,8 @@ class_name PlayerDoorSpawn
 ## The delta the player moves when spawned (in cells).
 @export var delta_move_on_entry : Vector2i = Vector2i(2,0)
 @export var base_map : BaseMap
+@export var max_health: int = 10
+@export var max_action_count: int = 3
 
 @onready var door_sprite : AnimatedSprite2DDoor = $AnimatedSprite2DDoor
 @onready var animation_player : AnimationPlayer = $AnimationPlayer
@@ -20,7 +22,7 @@ func spawn(player_idx : int) -> Player:
 
 	var relative_pos = get_parent().to_local(position)   
 	var relative_cell = MapHelpers.pixel_to_cell(relative_pos)
-	player = Player.create(base_map, player_idx, 3, relative_cell , actions)	
+	player = Player.create(base_map, player_idx, max_action_count, max_health, relative_cell , actions)	
 	base_map.add_child(player)
 	player.position = relative_pos
 	animation_player.play("OpenDoor")

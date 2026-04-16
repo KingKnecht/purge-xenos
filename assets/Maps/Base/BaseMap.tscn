@@ -46,3 +46,5 @@ base_map = NodePath("../..")
 [node name="PlayerDoorSpawn" parent="Spawnpoints" unique_id=1989021728 node_paths=PackedStringArray("base_map") instance=ExtResource("8_pgybo")]
 position = Vector2(16, 144)
 base_map = NodePath("../..")
+max_health = 5
+max_action_count = 2

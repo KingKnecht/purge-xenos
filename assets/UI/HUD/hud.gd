@@ -15,6 +15,9 @@ func _ready() -> void:
 	SignalBus.after_action_executed.connect(_on_after_action_executed)
 	action_button_theme = load("res://assets/UI/Themes/ActionButtonTheme.tres")
 	
+	action_points_bar.visible = false
+	health_points_bar.visible = false
+	
 func _process(_delta: float) -> void:
 	if active_player == null:
 		return
@@ -29,8 +32,12 @@ func on_character_begin_turn(player : BaseCharacter) -> void:
 	
 	active_player = player as Player
 	
+	action_points_bar.visible = true
+	health_points_bar.visible = true
 	action_points_bar.set_max_points(active_player.max_action_count)
+	action_points_bar.set_points(active_player.max_action_count)
 	health_points_bar.set_max_points(active_player.max_health)
+	health_points_bar.set_points(active_player.health)
 	
 	for button in container_action_buttons.get_children():
 		button.queue_free()

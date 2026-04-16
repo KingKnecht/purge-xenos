@@ -16,13 +16,13 @@ class_name BaseCharacter
 	get:
 		return current_cell
 
-@export var max_health: int = 10
-@export var max_action_count: int = 3
 @export var show_action_bar : bool = true
 @export var show_health_bar : bool = true
 
+var max_health: int = 10
+var max_action_count: int = 3
 var health: int = max_health
-var base_map: BaseMap		
+var base_map: BaseMap
 var Direction : Directions.Points = Directions.Points.EAST
 var combat_actions : Dictionary[CombatAction.ActionType, CombatAction]
 
@@ -44,7 +44,8 @@ var action_count: int:
 		if value == action_count:
 			return
 		action_count = value
-		action_point_bar.set_points(action_count)
+		if action_point_bar != null:
+			action_point_bar.set_points(action_count)
 		Log.debug("Action count of '%s' is: %d" % [self, action_count])
 	get:
 		return action_count
@@ -69,6 +70,8 @@ func _ready() -> void:
 		health_point_bar.visible = false
 	health_point_bar.set_max_points(max_health)
 	health_point_bar.set_points(health)
+	action_point_bar.set_max_points(max_action_count)
+	action_point_bar.set_points(action_count)
 
 func _on_battle_started():
 		Log.debug("Battle started, character %s can start acting" % str(self))

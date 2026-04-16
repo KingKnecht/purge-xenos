@@ -67,4 +67,6 @@ shader_parameter/slant_clip_margin = 0.0
 
 [node name="HealthPointsBar" type="ColorRect" unique_id=1928422567]
 material = SubResource("ShaderMaterial_j8hmm")
+offset_right = 100.0
+offset_bottom = 30.0
 script = ExtResource("1_ud6v2")
