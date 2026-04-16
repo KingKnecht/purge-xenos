@@ -55,8 +55,8 @@ func on_character_begin_turn(player : BaseCharacter) -> void:
 		button.size = Vector2(64.0,64.0)
 		button.custom_minimum_size = Vector2(64.0,64.0)
 		button.icon = action.icon
+		button.button_pressed = active_player.selected_action != null and active_player.selected_action.action_type == action.action_type
 		button.toggled.connect(_on_action_button_toggled.bind(action_type))
-		
 		
 func _on_action_button_toggled(toggled: bool, type: CombatAction.ActionType) -> void:
 	if active_player == null:
@@ -70,10 +70,10 @@ func _on_after_action_executed(character : BaseCharacter, action : CombatAction)
 	if character != active_player:
 		return
 		
-	for child in container_action_buttons.get_children():
-		var btn = child as Button
-		if btn != null:
-			btn.button_pressed = false
+	#for child in container_action_buttons.get_children():
+		#var btn = child as Button
+		#if btn != null:
+			#btn.button_pressed = false
 
 func _on_btn_end_turn_pressed() -> void:
 	if active_player == null:
