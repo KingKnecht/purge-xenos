@@ -44,18 +44,10 @@ var _move_threat_tiles: Array = []
 var _attack_threat_tiles: Array = []
 #var _threat_container: Node2D
 
-# Sequential threat animation state
-var _threat_tier_cells: Array = []  # Array of Array[Vector2i], one per tier
-var _threat_current_tier: int = 0
-var _threat_timer: Timer = null
+var _threat_cells: Array[Vector2i] = []
 
 func _ready() -> void:
 	tile_highlight = TILE_HIGHLIGHT_SCENE.instantiate();
-	_threat_timer = Timer.new()
-	_threat_timer.wait_time = 2.0
-	_threat_timer.one_shot = false
-	_threat_timer.timeout.connect(_on_threat_timer_timeout)
-	add_child(_threat_timer)
 
 	SignalBus.map_initialized.connect(func(map): base_map = map)
 	SignalBus.battle_driver_initialized.connect(func(driver): battle_driver = driver)
@@ -210,10 +202,9 @@ func _on_after_action_executed(character : BaseCharacter, action : CombatAction)
 			for child in attack_dots_dict[character]:
 				(child as Node2D).visible = false
 
-## Calculates movement tiers for [param enemy] and starts sequential display.
+## Shows tier 1 movement range for [param enemy].
 func _refresh_enemy_threat(enemy: BaseCharacter) -> void:
 	_clear_enemy_threat()
-	_threat_tier_cells.clear()
 
 	var move_action: CombatAction = null
 	for action in enemy.combat_actions.values():
@@ -224,34 +215,8 @@ func _refresh_enemy_threat(enemy: BaseCharacter) -> void:
 	if move_action == null or move_action.cost <= 0:
 		return
 
-	var max_uses = int(enemy.max_action_count / move_action.cost)
-	var prev_tier_set: Dictionary = {}
-
-	for tier in range(1, max_uses + 1):
-		var tier_cells = base_map.pathfind.get_reachable_cells(enemy.current_cell, move_action.movement * tier)
-		var exclusive: Array[Vector2i] = []
-		for cell in tier_cells:
-			if not prev_tier_set.has(cell):
-				exclusive.append(cell)
-		_threat_tier_cells.append(exclusive)
-		prev_tier_set.clear()
-		for cell in tier_cells:
-			prev_tier_set[cell] = true
-
-	if _threat_tier_cells.is_empty():
-		return
-
-	_threat_current_tier = 0
-	_show_threat_tier(_threat_current_tier)
-	_threat_timer.start()
-
-func _on_threat_timer_timeout() -> void:
-	_threat_current_tier = (_threat_current_tier + 1) % _threat_tier_cells.size()
-	_clear_move_threat_tiles()
-	_show_threat_tier(_threat_current_tier)
-
-func _show_threat_tier(tier_index: int) -> void:
-	for cell in _threat_tier_cells[tier_index]:
+	_threat_cells = base_map.pathfind.get_reachable_cells(enemy.current_cell, move_action.movement)
+	for cell in _threat_cells:
 		var tile = _get_or_create_move_threat_tile()
 		tile.position = MapHelpers.cell_to_pixel(cell)
 		tile.visible = true
@@ -261,8 +226,7 @@ func _clear_move_threat_tiles() -> void:
 		(tile as Node2D).visible = false
 
 func _clear_enemy_threat() -> void:
-	_threat_timer.stop()
-	_threat_tier_cells.clear()
+	_threat_cells.clear()
 	for tile in _move_threat_tiles:
 		(tile as Node2D).visible = false
 	for tile in _attack_threat_tiles:
