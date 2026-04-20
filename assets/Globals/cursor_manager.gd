@@ -216,9 +216,18 @@ func _refresh_enemy_threat(enemy: BaseCharacter) -> void:
 		return
 
 	_threat_cells = base_map.pathfind.get_reachable_cells(enemy.current_cell, move_action.movement)
+
+	var cell_set: Dictionary = {}
+	for cell in _threat_cells:
+		cell_set[cell] = true
+
 	for cell in _threat_cells:
 		var tile = _get_or_create_move_threat_tile()
 		tile.position = MapHelpers.cell_to_pixel(cell)
+		tile.set_instance_shader_parameter("needs_top_border",    not cell_set.has(cell + Vector2i( 0, -1)))
+		tile.set_instance_shader_parameter("needs_right_border",  not cell_set.has(cell + Vector2i( 1,  0)))
+		tile.set_instance_shader_parameter("needs_bottom_border", not cell_set.has(cell + Vector2i( 0,  1)))
+		tile.set_instance_shader_parameter("needs_left_border",   not cell_set.has(cell + Vector2i(-1,  0)))
 		tile.visible = true
 
 func _clear_move_threat_tiles() -> void:
