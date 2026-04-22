@@ -57,7 +57,17 @@ func on_character_begin_turn(player : BaseCharacter) -> void:
 		button.icon = action.icon
 		button.button_pressed = active_player.selected_action != null and active_player.selected_action.action_type == action.action_type
 		button.toggled.connect(_on_action_button_toggled.bind(action_type))
-		
+		button.mouse_entered.connect(_on_action_button_hover_entered.bind(action_type))
+		button.mouse_exited.connect(_on_action_button_hover_exited)
+
+func _on_action_button_hover_entered(type: CombatAction.ActionType) -> void:
+	if active_player == null:
+		return
+	SignalBus.action_button_hovered.emit(active_player.combat_actions[type])
+
+func _on_action_button_hover_exited() -> void:
+	SignalBus.action_button_hover_ended.emit()
+
 func _on_action_button_toggled(toggled: bool, type: CombatAction.ActionType) -> void:
 	if active_player == null:
 		return
@@ -66,7 +76,7 @@ func _on_action_button_toggled(toggled: bool, type: CombatAction.ActionType) -> 
 	else:
 		active_player.deselect_action()
 		
-func _on_after_action_executed(character : BaseCharacter, action : CombatAction):
+func _on_after_action_executed(character : BaseCharacter, _action : CombatAction):
 	if character != active_player:
 		return
 		

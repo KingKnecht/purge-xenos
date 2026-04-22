@@ -7,6 +7,7 @@ extends Node
 @onready var attack_dots = $AttackDots
 @onready var attack_lines = $AttackLines
 @onready var movement_range_tiles = $MovementRangeTiles
+@onready var action_target_icons = $ActionTargetIcons
 
 var _is_cell_targeted = false
 var _current_targeted_cell: Vector2i 
@@ -36,6 +37,10 @@ var _attack_threat_tiles: Array = []
 
 var _threat_cells: Array[Vector2i] = []
 
+var _action_target_icon_nodes: Array = []
+var _previewed_action: CombatAction = null
+var _selected_action_prev: CombatAction = null
+
 func _ready() -> void:
 	tile_highlight = TILE_HIGHLIGHT_SCENE.instantiate();
 
@@ -45,6 +50,8 @@ func _ready() -> void:
 	SignalBus.display_line_of_sight.connect(_on_display_line_of_sight)
 	SignalBus.hide_line_of_sight.connect(_hide_line_of_sight)
 	SignalBus.enemy_selected_action.connect(_on_enemy_selected_action)
+	SignalBus.action_button_hovered.connect(_on_action_button_hovered)
+	SignalBus.action_button_hover_ended.connect(_on_action_button_hover_ended)
 	
 func _process(_delta: float) -> void:
 	if base_map == null:
@@ -74,6 +81,20 @@ func _process(_delta: float) -> void:
 			_refresh_enemy_threat(hovered_enemy)
 		else:
 			_clear_enemy_threat()
+
+	if battle_driver != null and battle_driver.current_character != null:
+		var sel: CombatAction = battle_driver.current_character.selected_action
+		if sel != _selected_action_prev:
+			_selected_action_prev = sel
+			if _previewed_action == null:
+				if sel != null:
+					_refresh_action_target_icons(battle_driver.current_character, sel)
+				else:
+					_clear_action_target_icons()
+	else:
+		if _selected_action_prev != null:
+			_selected_action_prev = null
+			_clear_action_target_icons()
 
 func _on_all_characters_spawned(players : Array[Player], enemies : Array[BaseCharacter]):
 	for x in players + enemies:
@@ -193,10 +214,12 @@ func _update_path_dots(character : BaseCharacter, path: Array[Vector2i], movemen
 			else:
 				dot.visible = false
 
-func _on_after_action_executed(character : BaseCharacter, action : CombatAction):
+func _on_after_action_executed(character : BaseCharacter, _action : CombatAction):
 		if character == battle_driver.current_character:
 			for child in attack_dots_dict[character]:
 				(child as Node2D).visible = false
+			_selected_action_prev = null
+			_clear_action_target_icons()
 
 func _refresh_enemy_threat(enemy: BaseCharacter) -> void:
 	_clear_enemy_threat()
@@ -246,6 +269,92 @@ func _get_or_create_move_threat_tile() -> Node2D:
 	movement_range_tiles.add_child(tile)
 	_move_threat_tiles.append(tile)
 	return tile
+
+func _on_action_button_hovered(action: CombatAction) -> void:
+	_previewed_action = action
+	if battle_driver == null or battle_driver.current_character == null:
+		return
+	_refresh_action_target_icons(battle_driver.current_character, action)
+
+func _on_action_button_hover_ended() -> void:
+	_previewed_action = null
+	if battle_driver == null or battle_driver.current_character == null:
+		_clear_action_target_icons()
+		return
+	var sel: CombatAction = battle_driver.current_character.selected_action
+	if sel != null:
+		_refresh_action_target_icons(battle_driver.current_character, sel)
+	else:
+		_clear_action_target_icons()
+
+func _refresh_action_target_icons(character: BaseCharacter, action: CombatAction) -> void:
+	_clear_action_target_icons()
+	if action.icon == null:
+		return
+
+	var target_cells: Array[Vector2i] = []
+
+	if EnumHelpers.has_flag(action.valid_target_flags, CombatAction.ValidTargetFlags.OPPONENTS):
+		var opponents = battle_driver.get_opponents(character)
+		for opp in opponents:
+			if not is_instance_valid(opp):
+				continue
+			if action.weapon_range > 0:
+				var dist := maxi(abs(opp.current_cell.x - character.current_cell.x), abs(opp.current_cell.y - character.current_cell.y))
+				if dist > action.weapon_range:
+					continue
+			if action.needs_line_of_sight:
+				if base_map.get_line_of_sight(character.current_cell, opp.current_cell, true, true).size() == 0:
+					continue
+			target_cells.append(opp.current_cell)
+
+	if EnumHelpers.has_flag(action.valid_target_flags, CombatAction.ValidTargetFlags.GROUP_MEMBERS):
+		var own_group: Array
+		if battle_driver.Enemies.has(character):
+			own_group = battle_driver.Enemies
+		else:
+			own_group = battle_driver.Players
+		for member in own_group:
+			if not is_instance_valid(member) or member == character:
+				continue
+			if action.weapon_range > 0:
+				var dist := maxi(abs(member.current_cell.x - character.current_cell.x), abs(member.current_cell.y - character.current_cell.y))
+				if dist > action.weapon_range:
+					continue
+			if action.needs_line_of_sight:
+				if base_map.get_line_of_sight(character.current_cell, member.current_cell, true, true).size() == 0:
+					continue
+			target_cells.append(member.current_cell)
+
+	if EnumHelpers.has_flag(action.valid_target_flags, CombatAction.ValidTargetFlags.SELF):
+		target_cells.append(character.current_cell)
+
+	var icon_size := action.icon.get_size()
+	var cell_size := Vector2(MapHelpers.cell_size)
+	var icon_scale := cell_size / icon_size if icon_size.x > 0 and icon_size.y > 0 else Vector2.ONE
+
+	for cell in target_cells:
+		var sprite := _get_or_create_action_icon()
+		sprite.texture = action.icon
+		sprite.scale = icon_scale
+		sprite.position = MapHelpers.cell_to_pixel(cell)
+		sprite.visible = true
+
+func _clear_action_target_icons() -> void:
+	for node in _action_target_icon_nodes:
+		(node as Node2D).visible = false
+
+func _get_or_create_action_icon() -> Sprite2D:
+	for node in _action_target_icon_nodes:
+		var s := node as Sprite2D
+		if not s.visible:
+			return s
+	var sprite := Sprite2D.new()
+	sprite.z_index = 2
+	sprite.visible = false
+	action_target_icons.add_child(sprite)
+	_action_target_icon_nodes.append(sprite)
+	return sprite
 
 func display_attack_highlight(character : BaseCharacter, target_cell : Vector2i):
 	#if character.selected_action.damage == 0:

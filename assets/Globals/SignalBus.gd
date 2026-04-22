@@ -20,5 +20,7 @@ signal character_died(character : BaseCharacter)
 signal display_line_of_sight(character : BaseCharacter, area2d : Area2D)
 signal hide_line_of_sight(character : BaseCharacter)
 signal display_range(character : BaseCharacter, range : int)
+signal action_button_hovered(action: CombatAction)
+signal action_button_hover_ended()
 
 @warning_ignore_restore("unused_signal")

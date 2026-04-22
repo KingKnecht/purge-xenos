@@ -12,3 +12,5 @@ script = ExtResource("1_dfugi")
 [node name="AttackLines" type="Node" parent="." unique_id=1777834356]
 
 [node name="MovementRangeTiles" type="Node" parent="." unique_id=1721261386]
+
+[node name="ActionTargetIcons" type="Node" parent="." unique_id=1834920571]
